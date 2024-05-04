@@ -12,6 +12,8 @@ add_executable(DA2324_PRJ1_G17_4
         src/Menu.cpp
         src/Menu.h
         src/Graph.h
+        src/Location.h
+        src/Location.cpp
 )
 
 # Doxygen Build

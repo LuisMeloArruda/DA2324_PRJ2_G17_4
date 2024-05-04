@@ -19,6 +19,9 @@ public:
      *
      */
     void mainMenu();
+    void ToyGraph();
+    void ExtraFullyConnected();
+    void RealWorld();
 
 private:
     Manager network;

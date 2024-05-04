@@ -1,19 +1,17 @@
 #include "Manager.h"
 
-void Manager::readEdges(int number_edges) {
-    std::string j;
-        j = "../Data/Medium-Graphs/edges_" + std::to_string(number_edges) + ".csv";
-    std::fstream file(j);
+void Manager::readEdges(std::string path) {
+    std::fstream file(path);
 
     if (!file.is_open()) {
         std::cerr << "Error opening file!" << std::endl;
     }
 
     std::string line;
-    getline(file, line); // Ignore header
+    if (path[5] == '.') getline(file, line); // Ignore header //oq tinha aqui?
 
     while (getline(file, line)) {
-        // Exracting Info
+        // Extracting Info
         std::istringstream ss(line);
         unsigned int origin, destiny;//'s child
         double distance;
@@ -24,7 +22,36 @@ void Manager::readEdges(int number_edges) {
         ss >> distance;
         ss.ignore(1);
 
-        graph.addEdge(origin, destiny, distance);
-        graph.addVertex(origin);
+        graph.addEdge(Location(origin), Location(destiny), distance);
     }
 }
+
+void Manager::readNodes(std::string path, int number_vertex) {
+    std::fstream file(path);
+
+    if (!file.is_open()) {
+        std::cerr << "Error opening file!" << std::endl;
+    }
+
+    std::string line;
+    getline(file, line); // Ignore header
+
+    for (int i = number_vertex; i < number_vertex; i++) {
+        getline(file, line);
+        unsigned int id;
+        double longitude, latitude;
+        std::istringstream ss(line);
+        ss >> id;
+        ss.ignore(1);
+        ss >> longitude;
+        ss.ignore(1);
+        ss >> latitude;
+        ss.ignore(1);
+        Location vertex(id, longitude, latitude);
+    }
+}
+
+void Manager::Backtracking() {}
+void Manager::Triangular_Heuristic() {}
+void Manager::Other_Heuristics() {}
+void Manager::Traveling_Salesman() {}
