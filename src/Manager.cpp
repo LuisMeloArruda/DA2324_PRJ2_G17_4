@@ -8,7 +8,7 @@ void Manager::readEdges(std::string path) {
     }
 
     std::string line;
-    if (path[5] == '.') getline(file, line); // Ignore header //oq tinha aqui?
+    if (path[5] == '.') getline(file, line); // Ignore header
 
     while (getline(file, line)) {
         // Extracting Info
@@ -36,7 +36,7 @@ void Manager::readNodes(std::string path, int number_vertex) {
     std::string line;
     getline(file, line); // Ignore header
 
-    for (int i = number_vertex; i < number_vertex; i++) {
+    for (int i = 0; i < number_vertex; i++) {
         getline(file, line);
         unsigned int id;
         double longitude, latitude;
@@ -48,6 +48,7 @@ void Manager::readNodes(std::string path, int number_vertex) {
         ss >> latitude;
         ss.ignore(1);
         Location vertex(id, longitude, latitude);
+        graph.addVertex(vertex);
     }
 }
 
