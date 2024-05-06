@@ -6,25 +6,33 @@
 #include <sstream>
 #include <fstream>
 #include "Location.h"
+#include <cmath>
+#include "UFDS.h"
 
 class Manager {
 private:
     Graph<Location> graph;
 public:
     /**
- * @brief Reads data set from a CSV file.
- *
- * Complexity:
- *
- * @param number_edges Choose the number of edges for your medium-sized graph dataset.
- */
+     * @brief Reads data set from a CSV file.
+     *
+     * Complexity:
+     *
+     * @param number_edges Choose the number of edges for your medium-sized graph dataset.
+     */
     void readEdges(std::string path);
     void readNodes(std::string path, int number_vertex);
+    void readToyNodes(std::string path);
 
     void Backtracking();
     void Triangular_Heuristic();
     void Other_Heuristics();
     void Traveling_Salesman();
+
+    double convert_to_radians(double cord);
+    double Haversine(double lat1, double lon1, double lat2, double lon2);
+
+    vector<Vertex<Location> *> kruskal(Graph<Location> *g);
 };
 
 

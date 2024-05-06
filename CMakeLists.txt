@@ -14,6 +14,8 @@ add_executable(DA2324_PRJ1_G17_4
         src/Graph.h
         src/Location.h
         src/Location.cpp
+        src/UFDS.h
+        src/UFDS.cpp
 )
 
 # Doxygen Build

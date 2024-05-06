@@ -25,7 +25,7 @@ void Menu::ToyGraph() {
                 std::cout << "Invalid option.\n";
                 continue;
         }
-        network.readEdges(path);
+        network.readToyNodes(path);
         break;
     }
 }
@@ -126,9 +126,9 @@ Menu::Menu() {
 void Menu::mainMenu() {
     while (true) {
         std::cout << "\n\n\n"
-                     "||-------------------------------------||\n"
-                     "||                                     ||\n"
-                     "||-------------------------------------||\n";
+                     "||-------------------------------------------------------------||\n"
+                     "||  Routing Algorithm for Ocean Shipping and Urban Deliveries  ||\n"
+                     "||-------------------------------------------------------------||\n";
         std::cout << "\nChoose an option:\n"
                      "\n[0] Quit.\n"
                      "[1] Backtracking Algorithm\n"
