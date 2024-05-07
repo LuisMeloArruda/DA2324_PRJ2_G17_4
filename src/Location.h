@@ -10,7 +10,8 @@ class Location {
         std::string label;
     public:
         Location(unsigned int id, double longitude, double latitude): id(id), longitude(longitude), latitude(latitude) {}
-        Location(unsigned int id, std::string label) : id(id), label(label) {}
+        Location(): id(0), longitude(0.0), latitude(0.0), label("") {}
+        Location(unsigned int id, std::string label): id(id), label(label) {}
         Location(unsigned int id) : id(id) {}
         unsigned int getId();
         double getLongitude();

@@ -155,10 +155,8 @@ void Menu::mainMenu() {
                     network.Triangular_Heuristic();
                     break;
                 case 3:
-                    network.Other_Heuristics();
                     break;
                 case 4:
-                    network.Traveling_Salesman();
                     break;
                 default:
                     std::cout << "Invalid option.\n";
