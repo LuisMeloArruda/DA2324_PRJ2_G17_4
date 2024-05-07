@@ -142,7 +142,7 @@ void Manager::Backtracking() {
 }
 
 void Manager::auxBacktracking(unsigned int count, Vertex<Location>* currPos, double cost,
-                              odouble &ans, vector<Location> &path, vector<Location> &aux) {
+                              double &ans, vector<Location> &path, vector<Location> &aux) {
     // BACKTRACKING STEP
     // Loop to traverse the adjacency list
     // of currPos node and increasing the count
