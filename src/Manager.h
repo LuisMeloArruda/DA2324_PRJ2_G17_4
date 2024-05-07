@@ -3,11 +3,12 @@
 
 
 #include "Graph.h"
+#include "Location.h"
+#include "UFDS.h"
 #include <sstream>
 #include <fstream>
-#include "Location.h"
 #include <cmath>
-#include "UFDS.h"
+#include <float.h>
 
 class Manager {
 private:
@@ -25,6 +26,9 @@ public:
     void readToyNodes(std::string path);
 
     void Backtracking();
+    void auxBacktracking(unsigned int count, Vertex<Location>* currPos, double cost,
+                        double &ans, vector<Location> &path, vector<Location> &aux);
+
     void Triangular_Heuristic();
     void Other_Heuristics();
     void Traveling_Salesman();

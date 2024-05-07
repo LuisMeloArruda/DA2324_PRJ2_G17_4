@@ -114,7 +114,66 @@ vector<Vertex<Location> *> Manager::kruskal(Graph<Location> *g) {
     vector<Edge<Location>*> vec;
 }
 
-void Manager::Backtracking() {}
+void Manager::Backtracking() {
+    for (Vertex<Location>* location : graph.getVertexSet()) {
+        location->setVisited(false);        
+    }
+
+    Vertex<Location>* startPoint = graph.findVertex(Location(0));
+    startPoint->setVisited(true);
+    
+    vector<Location> path(graph.getVertexSet().size()), aux(graph.getVertexSet().size());
+    aux[0] = startPoint->getInfo();
+    unsigned int count = 1;
+    double cost = 0, ans = DBL_MAX;
+
+    auxBacktracking(count, startPoint, cost, ans, path, aux);
+
+    // PRINT OPTIMAL ROUTE
+    cout << "The minimal route is " << ans << " meters long and is as follows:" << endl;
+    for (int i = 0; i < graph.getVertexSet().size(); i++) {
+        cout << "LOCATION " << i << ": " << path[i].getId();
+        if (!path[i].getLabel().empty()) cout << " - " << path[i].getLabel();
+        cout << endl;
+    }
+    cout << "LOCATION " << graph.getVertexSet().size() << ": 0";
+    if (!path[0].getLabel().empty()) cout << " - " << path[0].getLabel();
+    cout << endl;
+}
+
+void Manager::auxBacktracking(unsigned int count, Vertex<Location>* currPos, double cost,
+                              odouble &ans, vector<Location> &path, vector<Location> &aux) {
+    // BACKTRACKING STEP
+    // Loop to traverse the adjacency list
+    // of currPos node and increasing the count
+    // by 1 and cost by graph[currPos][i] value
+    for (Edge<Location>* edge : currPos->getAdj()) {
+        // PRUNNING
+        if (edge->getWeight() + cost > ans) continue;
+
+        Vertex<Location>* v = edge->getDest();
+        // Check if cycle has been found and if it is shorter than what was previously found
+        if (count == graph.getVertexSet().size() && (cost + edge->getWeight() < ans) && (edge->getDest()->getInfo().getId() == 0)) {
+            ans = cost + edge->getWeight();
+            // Copy aux to path
+            for (int i = 0; i < graph.getVertexSet().size(); i++) {
+                path[i] = aux[i];
+            }
+            return;
+        }
+
+        if (!v->isVisited()) {
+            // Mark as visited
+            v->setVisited(true);
+            aux[count] = v->getInfo();
+
+            auxBacktracking(count+1, v, cost+edge->getWeight(), ans, path, aux);
+            // Mark ith node as unvisited
+            v->setVisited(false);
+        }
+    }
+}
+
 void Manager::Triangular_Heuristic() {}
 void Manager::Other_Heuristics() {}
 void Manager::Traveling_Salesman() {}
