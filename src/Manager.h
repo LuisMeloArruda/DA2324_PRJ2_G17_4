@@ -8,6 +8,7 @@
 #include "Location.h"
 #include <cmath>
 #include "UFDS.h"
+#include <unordered_set>
 
 class Manager {
 private:
@@ -31,8 +32,11 @@ public:
 
     double convert_to_radians(double cord);
     double Haversine(double lat1, double lon1, double lat2, double lon2);
+    void dfsKruskalPath(Vertex<Location> *v, vector<Edge<Location>*> &preorder);
 
-    vector<Vertex<Location> *> kruskal(Graph<Location> *g);
+    static bool crescente(Edge<Location> *primeiro, Edge<Location> *segundo);
+    void kruskal();
+
 };
 
 
