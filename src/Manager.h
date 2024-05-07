@@ -40,7 +40,6 @@ public:
     void dfsKruskalPath(Vertex<Location> *v, vector<Edge<Location>*> &preorder);
 
     static bool crescente(Edge<Location> *primeiro, Edge<Location> *segundo);
-    void kruskal();
 
 };
 

@@ -133,19 +133,12 @@ void Manager::dfsKruskalPath(Vertex<Location> *v, vector<Edge<Location>*> &preor
     }
 }
 
-void Manager::kruskal() {
-    UFDS ufds(graph.getNumVertex());
-
+void Manager::Triangular_Heuristic() {
+    // RESETS THE VISITED FLAG OF VERTICES AND THE SELECTED FLAG OF EDGES IN THE GRAPH
+    // PUTS THE EDGES IN A VECTOR
     vector<Edge<Location>*> vec;
-
     for (Vertex<Location> *v : graph.getVertexSet()) {
         v->setVisited(false);
-        for (Edge<Location> *e : v->getAdj()) {
-            e->setSelected(false);
-        }
-    }
-
-    for (Vertex<Location> *v : graph.getVertexSet()) {
         for (Edge<Location> *e : v->getAdj()) {
             e->setSelected(false);
             if (e->getOrig()->getInfo().getId() < e->getDest()->getInfo().getId()) {
@@ -154,8 +147,11 @@ void Manager::kruskal() {
         }
     }
 
+    // SORTS THE EDGES INSIDE THE VECTOR IN ASCENDING ORDER
     std::sort(vec.begin(), vec.end(), Manager::crescente);
 
+    // APPLIES UNION-FIND DATA STRUCTURE ON THE VECTOR TO ASSIGN THE SELECTED ATTRIBUTE TO THE EDGES THAT CAN BE PART OF THE MST
+    UFDS ufds(graph.getNumVertex());
     for (Edge<Location> *e : vec) {
         if (ufds.findSet(e->getOrig()->getInfo().getId()) != ufds.findSet(e->getDest()->getInfo().getId())) {
             ufds.linkSets(e->getOrig()->getInfo().getId(), e->getDest()->getInfo().getId());
@@ -163,52 +159,54 @@ void Manager::kruskal() {
         }
     }
 
+    // PERFORMS A DFS ON THE GRAPH TO OBTAIN THE MST AND PUTS IT IN PREORDER
     vector<Edge<Location>*> preorder;
     dfsKruskalPath(graph.getVertexSet().at(0), preorder);
 
-    unordered_set<int> visitedVertices;
+    // ALGORITHM TO ELIMINATE DUPLICATES FROM THE PREORDER AND SUM THE WEIGHT OF THE EDGES
+    unordered_set<int> visitedVertices; // UNORDERED_SET TO LIMIT PASSAGE TO 1 AT EACH POINT
     visitedVertices.insert(0);
-    int last_inserted = 0;
-    double caixa = 0;
-    bool adicionou;
+    int last_inserted = 0; // STORES THE LAST INSERTED POINT IN THE UNORDERED_SET
+    double cost = 0;
+    bool added;
     for (Edge<Location> *e : preorder) {
-        if (visitedVertices.find(e->getDest()->getInfo().getId()) == visitedVertices.end()) {
-            if (last_inserted == e->getOrig()->getInfo().getId()) {
-                caixa += e->getWeight();
+        if (visitedVertices.find(e->getDest()->getInfo().getId()) == visitedVertices.end()) { // THE NEW POINT IS IN THE DEST OF THE EDGE
+            if (last_inserted == e->getOrig()->getInfo().getId()) { // IF THE LAST ADDED POINT IS IN THE SOURCE, SIMPLY ADD THE COST OF THIS EDGE
+                cost += e->getWeight();
             }
-            else {
-                adicionou = false;
+            else { // IT'S A POINT IN THE SOURCE OF THE EDGE THAT HAS ALREADY BEEN ENCOUNTERED, BUT WASN'T THE LAST ONE TO BE ADDED
+                added = false;
                 Vertex<Location> *temp = graph.findVertex(last_inserted);
-                for (Edge<Location> *edge : temp->getAdj()) {
+                for (Edge<Location> *edge : temp->getAdj()) { // IF IT ALREADY HAS A DECLARED DISTANCE, WE TAKE THAT ONE
                     if (edge->getDest()->getInfo().getId() == e->getDest()->getInfo().getId()) {
-                        caixa += edge->getWeight();
-                        adicionou = true;
+                        cost += edge->getWeight();
+                        added = true;
                     }
                 }
-                if (!adicionou) {
-                    caixa += Haversine(temp->getInfo().getLatitude(), temp->getInfo().getLongitude(),
+                if (!added) { // OTHERWISE, WE CALCULATE THE DISTANCE THROUGH LATITUDES AND LONGITUDES
+                    cost += Haversine(temp->getInfo().getLatitude(), temp->getInfo().getLongitude(),
                                        e->getDest()->getInfo().getLatitude(), e->getDest()->getInfo().getLongitude());
                 }
             }
             visitedVertices.insert(e->getDest()->getInfo().getId());
             last_inserted = e->getDest()->getInfo().getId();
         }
-        if (visitedVertices.find(e->getOrig()->getInfo().getId()) == visitedVertices.end()) {
+        if (visitedVertices.find(e->getOrig()->getInfo().getId()) == visitedVertices.end()) { // THE NEW POINT IS IN THE SOURCE OF THE EDGE
             visitedVertices.insert(e->getOrig()->getInfo().getId());
-            if (last_inserted == e->getDest()->getInfo().getId()) {
-                caixa += e->getWeight();
+            if (last_inserted == e->getDest()->getInfo().getId()) { // IF THE LAST ADDED POINT IS IN THE DESTINATION, SIMPLY ADD THE COST OF THIS EDGE
+                cost += e->getWeight();
             }
-            else {
-                adicionou = false;
+            else { // IT'S A POINT IN THE DESTINATION OF THE EDGE THAT HAS ALREADY BEEN ENCOUNTERED, BUT WASN'T THE LAST ONE TO BE ADDED
+                added = false;
                 Vertex<Location> *temp = graph.findVertex(last_inserted);
-                for (Edge<Location> *edge : temp->getAdj()) {
+                for (Edge<Location> *edge : temp->getAdj()) { //SE ELE JÁ TEM UMA DISTANCIA DECLARADA PEGAMOS NELA
                     if (edge->getDest()->getInfo().getId() == e->getOrig()->getInfo().getId()) {
-                        caixa += edge->getWeight();
-                        adicionou = true;
+                        cost += edge->getWeight();
+                        added = true;
                     }
                 }
-                if (!adicionou) {
-                    caixa += Haversine(temp->getInfo().getLatitude(), temp->getInfo().getLongitude(),
+                if (!added) { // OTHERWISE, WE CALCULATE THE DISTANCE THROUGH LATITUDES AND LONGITUDES
+                    cost += Haversine(temp->getInfo().getLatitude(), temp->getInfo().getLongitude(),
                                        e->getOrig()->getInfo().getLatitude(), e->getOrig()->getInfo().getLongitude());
                 }
             }
@@ -216,23 +214,20 @@ void Manager::kruskal() {
             last_inserted = e->getOrig()->getInfo().getId();
         }
     }
-    adicionou = false;
+    // CONNECT THE LAST INSERTED POINT TO THE SOURCE
+    added = false;
     Vertex<Location> *temp = graph.findVertex(last_inserted);
     for (Edge<Location> *e : temp->getAdj()) {
         if (e->getDest()->getInfo().getId() == 0) {
-            caixa += e->getWeight();
-            adicionou = true;
+            cost += e->getWeight();
+            added = true;
         }
     }
-    if (!adicionou) {
-        caixa += Haversine(temp->getInfo().getLatitude(), temp->getInfo().getLongitude(), graph.findVertex(0)->getInfo().getLatitude(),
+    if (!added) {
+        cost += Haversine(temp->getInfo().getLatitude(), temp->getInfo().getLongitude(), graph.findVertex(0)->getInfo().getLatitude(),
                            graph.findVertex(0)->getInfo().getLongitude());
     }
-    std::cout << caixa << endl;
-}
-
-void Manager::Triangular_Heuristic() {
-    kruskal();
+    std::cout << cost << endl;
 }
 
 void Manager::Backtracking() {
