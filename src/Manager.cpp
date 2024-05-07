@@ -199,7 +199,7 @@ void Manager::Triangular_Heuristic() {
             else { // IT'S A POINT IN THE DESTINATION OF THE EDGE THAT HAS ALREADY BEEN ENCOUNTERED, BUT WASN'T THE LAST ONE TO BE ADDED
                 added = false;
                 Vertex<Location> *temp = graph.findVertex(last_inserted);
-                for (Edge<Location> *edge : temp->getAdj()) { //SE ELE JÁ TEM UMA DISTANCIA DECLARADA PEGAMOS NELA
+                for (Edge<Location> *edge : temp->getAdj()) { // IF IT ALREADY HAS A DECLARED DISTANCE, WE TAKE THAT ONE
                     if (edge->getDest()->getInfo().getId() == e->getOrig()->getInfo().getId()) {
                         cost += edge->getWeight();
                         added = true;
