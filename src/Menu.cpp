@@ -1,3 +1,4 @@
+#include <chrono>
 #include "Menu.h"
 
 void Menu::ToyGraph() {
@@ -149,7 +150,7 @@ void Menu::mainMenu() {
                 case 0:
                     exit(0);
                 case 1:
-                    network.Backtracking();
+                    Backtracking();
                     break;
                 case 2:
                     network.Triangular_Heuristic();
@@ -164,4 +165,14 @@ void Menu::mainMenu() {
             }
         }
     }
+}
+
+void Menu::Backtracking() {
+    std::cout << "\nLoading... \n\n";
+    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+    network.Backtracking();
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::chrono::duration<double, std::milli> duration = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(end - start);
+    double time = duration.count();
+    std::cout << "\nExecution Time: " << time << " milliseconds\n\n";
 }

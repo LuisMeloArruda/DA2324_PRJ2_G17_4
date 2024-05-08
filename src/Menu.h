@@ -41,6 +41,8 @@ public:
      */
     void RealWorld();
 
+    void Backtracking();
+
 private:
     Manager network;
 };
