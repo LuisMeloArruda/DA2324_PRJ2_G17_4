@@ -7,6 +7,8 @@
 #include <limits>
 #include <utility>
 #include <algorithm>
+#include <stack>
+#include "UFDS.h"
 
 template <class T>
 class Edge;
@@ -115,6 +117,57 @@ public:
     bool isDAG() const;
     bool dfsIsDAG(Vertex<T> *v) const;
     std::vector<T> topsort() const;
+    // auxiliary functions
+    /**
+     * @brief
+     *
+     * Complexity:
+     *
+     */
+    void MST();
+    /**
+     * @brief
+     *
+     * Complexity:
+     *
+     * @return
+     */
+    vector<Vertex<T> *> oddVertex();
+    /**
+     * @brief
+     *
+     * Complexity:
+     *
+     * @param first
+     * @param second
+     * @return
+     */
+    static bool ascending(Edge<T> *first, Edge<T> *second);
+    /**
+     * @brief
+     *
+     * Complexity:
+     *
+     * @param odd
+     */
+    void perfectMatch(const vector<Vertex<T>*>& odd);
+    /**
+     * @brief
+     *
+     * Complexity:
+     *
+     * @return
+     */
+    stack<Vertex<T> *> eulerianTour();
+    /**
+     * @brief
+     *
+     * Complexity:
+     *
+     * @param vertex
+     * @param tour
+     */
+    void auxEulerianTour(Vertex<T>* vertex, stack<Vertex<T> *> &tour);
 
 protected:
     std::vector<Vertex<T> *> vertexSet;    // vertex set
@@ -591,6 +644,107 @@ Graph<T>::~Graph() {
 
 // Algoritmos implementados
 
+template <class T>
+void Graph<T>::MST() {
+    // RESETS THE VISITED FLAG OF VERTICES AND THE SELECTED FLAG OF EDGES IN THE GRAPH
+    // PUTS THE EDGES IN A VECTOR
+    vector<Edge<T>*> vec;
+    for (Vertex<T> *v : vertexSet) {
+        v->setVisited(false);
+        for (Edge<T> *e : v->getAdj()) {
+            e->setSelected(false);
+            if (e->getOrig()->getInfo().getId() < e->getDest()->getInfo().getId()) {
+                vec.push_back(e);
+            }
+        }
+    }
 
+    // SORTS THE EDGES INSIDE THE VECTOR IN ASCENDING ORDER OF WEIGHT
+    std::sort(vec.begin(), vec.end(), Graph<T>::ascending);
 
+    // APPLIES UNION-FIND DATA STRUCTURE ON THE VECTOR TO ASSIGN THE SELECTED ATTRIBUTE TO THE EDGES THAT CAN BE PART OF THE MST
+    UFDS ufds(getNumVertex());
+    for (Edge<T> *e : vec) {
+        if (ufds.findSet(e->getOrig()->getInfo().getId()) != ufds.findSet(e->getDest()->getInfo().getId())) {
+            ufds.linkSets(e->getOrig()->getInfo().getId(), e->getDest()->getInfo().getId());
+            e->setSelected(true);
+        }
+    }
+}
+
+// Christofides
+
+template <class T>
+vector<Vertex<T> *> Graph<T>::oddVertex() {
+    vector<Vertex<T>*> odd;
+    for (Vertex<T> *v : vertexSet) {
+        if (!(v->getIndegree() % 2 == 0)) odd.push_back(v);
+    }
+    return odd;
+}
+
+template <class T>
+void Graph<T>::perfectMatch(const vector<Vertex<T>*>& odd) {
+    for (auto v: odd) v->setVisited(false);
+    vector<Edge<T> *> edges;
+    int i = odd.size() - 1;
+    // arestas elegíveis
+    while (i >= 0) {
+        Vertex<T>* v = odd[i];
+        for (Edge<T>* e: v->getIncoming()) { // erro veio daqui
+            if ((e->getOrig->getIndegree() % 2 != 0) && (e->getOrig()->getInfo().getId() > v->getInfo().getId())) {
+                edges.push_back(e);
+            }
+        }
+        i--;
+    }
+    // ordenar pela distância
+    std::sort(edges.begin(), edges.end(), [](Edge<T> *first, Edge<T> *second) {
+        return second->getAdj() > first->getDest(); // mudar
+    });
+    // match
+    int count = 0;
+    for (auto e: edges) {
+        if (!(e->getDest()->isVisited() && e->getOrig()->isVisited())) {
+            e->getDest()->setVisited(true);
+            e->getOrig()->setVisited(true);
+            auto origin = e->getDest()->addEdge(e->getOrig(), e->getDest());
+            auto destination = e->getOrig()->addEdge(e->getAdj(), e->getDest());
+            origin->setReverse(destination);
+            destination->setReverse(origin);
+            count++; count++;
+        }
+        if (count == odd.size()) return;
+    }
+}
+
+template <class T>
+stack<Vertex<T> *> Graph<T>::eulerianTour() {
+    for (Vertex<T> *v : vertexSet) {
+        for (Edge<T>* e: v->getAdj()) {
+            e->setSelected(false);
+            e->getReverse()->setSelected(false);
+        }
+    }
+    stack<Vertex<T> *> tour;
+    auxEulerianTour(vertexSet[0], tour);
+    return tour;
+}
+
+template <class T>
+void Graph<T>::auxEulerianTour(Vertex<T>* vertex, stack<Vertex<T> *> &tour) {
+    for (Edge<T>* e: vertex->getAdj()) {
+        if (!e->isSelected()) {
+            e->setSelected(true);
+            e->getReverse()->setSelected(true);
+            auxEulerianTour(e->getDest(), tour);
+        }
+    }
+    tour.push(vertex);
+}
+
+template <class T>
+bool Graph<T>::ascending(Edge<T> *first, Edge<T> *second) {
+    return first->getWeight() < second->getWeight();
+}
 #endif //DA2324_PRJ1_G17_4_GRAPH_H

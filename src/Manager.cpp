@@ -92,27 +92,55 @@ void Manager::readToyNodes(std::string path) {
 
 }
 
-double Manager::convert_to_radians(double coord) {
-    return (coord * 3.1416) / 180;
+void Manager::Backtracking() {
+    for (Vertex<Location>* location : graph.getVertexSet()) {
+        location->setVisited(false);
+    }
+
+    Vertex<Location>* startPoint = graph.findVertex(Location(0));
+    startPoint->setVisited(true);
+
+    vector<Location> path(graph.getVertexSet().size()), aux(graph.getVertexSet().size());
+    aux[0] = startPoint->getInfo();
+    unsigned int count = 1;
+    double cost = 0, ans = DBL_MAX;
+
+    auxBacktracking(count, startPoint, cost, ans, path, aux);
+
+    printOptimalPath(path, cost);
 }
 
-double Manager::Haversine(double lat1, double lon1, double lat2, double lon2) {
-    double rad_lat1 = convert_to_radians(lat1);
-    double rad_lon1 = convert_to_radians(lon1);
-    double rad_lat2 = convert_to_radians(lat2);
-    double rad_lon2 = convert_to_radians(lon2);
+void Manager::auxBacktracking(unsigned int count, Vertex<Location>* currPos, double cost,
+                              double &ans, vector<Location> &path, vector<Location> &aux) {
+    // BACKTRACKING STEP
+    // Loop to traverse the adjacency list
+    // of currPos node and increasing the count
+    // by 1 and cost by graph[currPos][i] value
+    for (Edge<Location>* edge : currPos->getAdj()) {
+        // PRUNNING
+        if (edge->getWeight() + cost > ans) continue;
 
-    double delta_lat = rad_lat2 - rad_lat1;
-    double delta_lon = rad_lon2 - rad_lon1;
+        Vertex<Location>* v = edge->getDest();
+        // Check if cycle has been found and if it is shorter than what was previously found
+        if (count == graph.getVertexSet().size() && (cost + edge->getWeight() < ans) && (edge->getDest()->getInfo().getId() == 0)) {
+            ans = cost + edge->getWeight();
+            // Copy aux to path
+            for (int i = 0; i < graph.getVertexSet().size(); i++) {
+                path[i] = aux[i];
+            }
+            return;
+        }
 
-    double aux = (sin(delta_lat/2) * sin(delta_lat/2)) + cos(rad_lat1) * cos(rad_lat2) * (sin(delta_lon/2) * sin(delta_lon/2)) ;
-    double c = 2.0 * atan2 ( sqrt(aux), sqrt(1.0-aux));
-    double earthradius = 6371000;
-    return earthradius * c ;
-}
+        if (!v->isVisited()) {
+            // Mark as visited
+            v->setVisited(true);
+            aux[count] = v->getInfo();
 
-bool Manager::crescente(Edge<Location> *primeiro, Edge<Location> *segundo) {
-    return primeiro->getWeight() < segundo->getWeight();
+            auxBacktracking(count+1, v, cost+edge->getWeight(), ans, path, aux);
+            // Mark ith node as unvisited
+            v->setVisited(false);
+        }
+    }
 }
 
 void Manager::dfsKruskalPath(Vertex<Location> *v, vector<Edge<Location>*> &preorder) {
@@ -185,7 +213,7 @@ void Manager::Triangular_Heuristic() {
                 }
                 if (!added) { // OTHERWISE, WE CALCULATE THE DISTANCE THROUGH LATITUDES AND LONGITUDES
                     cost += Haversine(temp->getInfo().getLatitude(), temp->getInfo().getLongitude(),
-                                       e->getDest()->getInfo().getLatitude(), e->getDest()->getInfo().getLongitude());
+                                      e->getDest()->getInfo().getLatitude(), e->getDest()->getInfo().getLongitude());
                 }
             }
             visitedVertices.insert(e->getDest()->getInfo().getId());
@@ -207,7 +235,7 @@ void Manager::Triangular_Heuristic() {
                 }
                 if (!added) { // OTHERWISE, WE CALCULATE THE DISTANCE THROUGH LATITUDES AND LONGITUDES
                     cost += Haversine(temp->getInfo().getLatitude(), temp->getInfo().getLongitude(),
-                                       e->getOrig()->getInfo().getLatitude(), e->getOrig()->getInfo().getLongitude());
+                                      e->getOrig()->getInfo().getLatitude(), e->getOrig()->getInfo().getLongitude());
                 }
             }
             visitedVertices.insert(e->getOrig()->getInfo().getId());
@@ -225,28 +253,101 @@ void Manager::Triangular_Heuristic() {
     }
     if (!added) {
         cost += Haversine(temp->getInfo().getLatitude(), temp->getInfo().getLongitude(), graph.findVertex(0)->getInfo().getLatitude(),
-                           graph.findVertex(0)->getInfo().getLongitude());
+                          graph.findVertex(0)->getInfo().getLongitude());
     }
     std::cout << cost << endl;
 }
 
-void Manager::Backtracking() {
-    for (Vertex<Location>* location : graph.getVertexSet()) {
-        location->setVisited(false);        
+void Manager::Other_Heuristics() {
+    // We are using Christofides' algorithm to assure an approximation factor of 3/2
+    // First Step: Find a Minimum Spanning Tree (set as selected the corresponding edges) -> O(E*Log(V))
+    graph.MST();
+
+    // Second Step: Get vertex with odd degree -> O(V)
+    vector<Vertex<Location>*> oddDegreeVertex;
+    for (Vertex<Location>* v: graph.getVertexSet()) {
+        if (v->getAdj().size() % 2 != 0) oddDegreeVertex.push_back(v);
     }
 
-    Vertex<Location>* startPoint = graph.findVertex(Location(0));
-    startPoint->setVisited(true);
-    
-    vector<Location> path(graph.getVertexSet().size()), aux(graph.getVertexSet().size());
-    aux[0] = startPoint->getInfo();
-    unsigned int count = 1;
-    double cost = 0, ans = DBL_MAX;
+    // Third Step: Find Perfect Matching of odd Vertex -> O(V³)
+    graph.perfectMatch(oddDegreeVertex);
 
-    auxBacktracking(count, startPoint, cost, ans, path, aux);
+    // Fourth Step: DFS search using only selected edges and using short-cutting -> O(V+E)
+    std::vector<Vertex<Location>*> path;
+    double cost = 0;
+    for (Vertex<Location>* v : graph.getVertexSet())
+        v->setVisited(false);
+    for (Vertex<Location>* v : graph.getVertexSet())
+        if (!v->isVisited())
+            auxDFS(v, path, cost);
 
-    // PRINT OPTIMAL ROUTE
-    cout << "The minimal route is " << ans << " meters long and is as follows:" << endl;
+    // Fifth Step: Add cost of going back to beginning
+    bool found = false;
+    for (Edge<Location>* edge : path.back()->getAdj()) {
+        if (edge->getDest() == path.front()) { // Found Connection
+            cost += edge->getWeight();
+            found = true;
+        }
+    }
+    // If connection not found calculate edge "on-demand"
+    if (!found) cost += Haversine(path.back()->getInfo().getLatitude(), path.back()->getInfo().getLongitude(),
+                                  path.front()->getInfo().getLatitude(),  path.front()->getInfo().getLongitude());
+
+    // Sixth Step: Print found solution
+    std::vector<Location> locations;
+    for (Vertex<Location>* v : path)
+        locations.push_back(v->getInfo());
+    printOptimalPath(locations, cost);
+}
+
+void Manager::auxDFS(Vertex<Location>* v, vector<Vertex<Location>*>& path, double cost) {
+    v->setVisited(true);
+    path.push_back(v);
+    for (Edge<Location>* e : v->getAdj()) {
+        if (!e->isSelected()) continue; // Ignore non-selected edges
+        Vertex<Location>* w = e->getDest();
+        if (!w->isVisited()) { // Exploring new node
+            // Check For connection between last node and node to be explored
+            bool found = false;
+            for (Edge<Location>* edge : path.back()->getAdj()) {
+                if (edge->getDest() == w) { // Found Connection
+                    cost += edge->getWeight();
+                    found = true;
+                }
+            }
+            // If connection not found calculate edge "on-demand"
+            if (!found) cost += Haversine(path.back()->getInfo().getLatitude(), path.back()->getInfo().getLongitude(),
+                                         w->getInfo().getLatitude(), w->getInfo().getLongitude());
+            auxDFS(w, path, cost);
+        }
+    }
+}
+
+double Manager::convert_to_radians(double coord) {
+    return (coord * 3.1416) / 180;
+}
+
+double Manager::Haversine(double lat1, double lon1, double lat2, double lon2) {
+    double rad_lat1 = convert_to_radians(lat1);
+    double rad_lon1 = convert_to_radians(lon1);
+    double rad_lat2 = convert_to_radians(lat2);
+    double rad_lon2 = convert_to_radians(lon2);
+
+    double delta_lat = rad_lat2 - rad_lat1;
+    double delta_lon = rad_lon2 - rad_lon1;
+
+    double aux = (sin(delta_lat/2) * sin(delta_lat/2)) + cos(rad_lat1) * cos(rad_lat2) * (sin(delta_lon/2) * sin(delta_lon/2)) ;
+    double c = 2.0 * atan2 ( sqrt(aux), sqrt(1.0-aux));
+    double earthradius = 6371000;
+    return earthradius * c ;
+}
+
+bool Manager::crescente(Edge<Location> *primeiro, Edge<Location> *segundo) {
+    return primeiro->getWeight() < segundo->getWeight();
+}
+
+void Manager::printOptimalPath(vector<Location> path, double cost) {
+    cout << "The calculated route is " << cost << " meters long and is as follows:" << endl;
     for (int i = 0; i < graph.getVertexSet().size(); i++) {
         cout << "LOCATION " << i << ": " << path[i].getId();
         if (!path[i].getLabel().empty()) cout << " - " << path[i].getLabel();
@@ -255,37 +356,4 @@ void Manager::Backtracking() {
     cout << "LOCATION " << graph.getVertexSet().size() << ": 0";
     if (!path[0].getLabel().empty()) cout << " - " << path[0].getLabel();
     cout << endl;
-}
-
-void Manager::auxBacktracking(unsigned int count, Vertex<Location>* currPos, double cost,
-                              double &ans, vector<Location> &path, vector<Location> &aux) {
-    // BACKTRACKING STEP
-    // Loop to traverse the adjacency list
-    // of currPos node and increasing the count
-    // by 1 and cost by graph[currPos][i] value
-    for (Edge<Location>* edge : currPos->getAdj()) {
-        // PRUNNING
-        if (edge->getWeight() + cost > ans) continue;
-
-        Vertex<Location>* v = edge->getDest();
-        // Check if cycle has been found and if it is shorter than what was previously found
-        if (count == graph.getVertexSet().size() && (cost + edge->getWeight() < ans) && (edge->getDest()->getInfo().getId() == 0)) {
-            ans = cost + edge->getWeight();
-            // Copy aux to path
-            for (int i = 0; i < graph.getVertexSet().size(); i++) {
-                path[i] = aux[i];
-            }
-            return;
-        }
-
-        if (!v->isVisited()) {
-            // Mark as visited
-            v->setVisited(true);
-            aux[count] = v->getInfo();
-
-            auxBacktracking(count+1, v, cost+edge->getWeight(), ans, path, aux);
-            // Mark ith node as unvisited
-            v->setVisited(false);
-        }
-    }
 }

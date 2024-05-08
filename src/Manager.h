@@ -113,6 +113,9 @@ public:
      */
     static bool crescente(Edge<Location> *primeiro, Edge<Location> *segundo);
 
+    void printOptimalPath(vector<Location> path, double cost);
+
+    void auxDFS(Vertex<Location>* v, vector<Vertex<Location>*>& path, double cost);
 };
 
 

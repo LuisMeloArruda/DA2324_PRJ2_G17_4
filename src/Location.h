@@ -10,12 +10,12 @@ class Location {
         std::string label;
     public:
         /**
-         * @brief
+         * @brief Constructor of Location class with the given id, longitude, and latitude.
          *
          * Complexity:
          *
-         * @param id
-         * @param longitude
+         * @param id Identifier of the location.
+         * @param longitude llongitude of the location.
          * @param latitude
          */
         Location(unsigned int id, double longitude, double latitude): id(id), longitude(longitude), latitude(latitude) {}

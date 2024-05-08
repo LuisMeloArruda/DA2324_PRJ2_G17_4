@@ -7,39 +7,39 @@ using namespace std;
 class UFDS {
 public:
     /**
-     * @brief
+     * @brief A class representing a Union-Find Disjoint Set
      *
-     * Complexity:
+     * Complexity: O(N), where N is the number of elements in the UFDS.
      *
-     * @param N
+     * @param N The number of elements in the UFDS.
      */
     UFDS(unsigned int N);
     /**
-     * @brief
+     * @brief Finds the set representative for the element i belongs to.
      *
-     * Complexity:
+     * Complexity: O(log N), where N is the number of elements in the UFDS.
      *
-     * @param i
-     * @return
+     * @param i The element whose representative needs to be found.
+     * @return The representative element of the set containing i.
      */
     unsigned long findSet(unsigned int i);
     /**
-     * @brief
+     * @brief Unites the sets that contain elements i and j.
      *
-     * Complexity:
+     * Complexity: O(log N), where N is the number of elements in the UFDS.
      *
-     * @param i
-     * @param j
+     * @param i First Element.
+     * @param j Second Element.
      */
     void linkSets(unsigned int i, unsigned int j);
     /**
-     * @brief
+     * @brief Checks if elements i and j belong to the same set.
      *
-     * Complexity:
+     * Complexity: O(log N), where N is the number of elements in the UFDS.
      *
-     * @param i
-     * @param j
-     * @return
+     * @param i First Element.
+     * @param j Second Element.
+     * @return True if i and j belong to the same set, otherwise false.
      */
     bool isSameSet(unsigned int i, unsigned int j);
 private:

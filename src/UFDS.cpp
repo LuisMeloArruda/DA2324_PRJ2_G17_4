@@ -1,7 +1,3 @@
-//
-// Created by luism on 06-05-2024.
-//
-
 #include "UFDS.h"
 
 UFDS::UFDS(unsigned int N) {
