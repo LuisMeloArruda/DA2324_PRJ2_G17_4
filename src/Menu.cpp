@@ -54,8 +54,8 @@ void Menu::ExtraFullyConnected() {
 
 void Menu::RealWorld() {
     int option, number_vertex;
-    std::string path = "../Data/Real_World_Graphs/";
-    std::string pathNodes = "../Data/Real_World_Graphs/";
+    std::string path = "../Data/Real-world\ Graphs/";
+    std::string pathNodes = "../Data/Real-world\ Graphs/";
     while (true) {
         std::cout << "\nWhat graph?\n";
         std::cout << "\nChoose an option:\n"
@@ -67,7 +67,7 @@ void Menu::RealWorld() {
         switch (option) {
             case 1:
                 path.append("graph1/edges.csv");
-                pathNodes.append("graph2/nodes.csv");
+                pathNodes.append("graph1/nodes.csv");
                 number_vertex = 1000;
                 break;
             case 2:
@@ -77,7 +77,7 @@ void Menu::RealWorld() {
                 break;
             case 3:
                 path.append("graph3/edges.csv");
-                pathNodes.append("graph2/nodes.csv");
+                pathNodes.append("graph3/nodes.csv");
                 number_vertex = 10000;
                 break;
             default:

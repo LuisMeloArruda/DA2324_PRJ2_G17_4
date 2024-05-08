@@ -10,7 +10,7 @@ void Manager::readEdges(std::string path) {
 
     std::string line;
 
-    //if (path[5] != '_') getline(file, line); // Ignore header
+    if (path.substr(8, 10) == "Real-world") getline(file, line); // Ignore header
 
     while (getline(file, line)) {
         // Extracting Info
@@ -77,7 +77,7 @@ void Manager::readToyNodes(std::string path) {
         ss.ignore(1);
         Location source(src);
         Location destiny(dest);
-        if (path[5] == 't') {
+        if (path == "../Data/Toy-Graphs/tourism.csv") {
             getline(ss, originLabel,',');
             ss >> destinyLabel;
             source = Location(src, originLabel);

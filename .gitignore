@@ -1,4 +1,5 @@
 cmake-build-debug/
 .idea/*
-Data/Real_world_Graphs/*
+Data/Real-world Graphs/*
+Data/__MACOSX/*
 .vscode
