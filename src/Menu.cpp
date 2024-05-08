@@ -100,8 +100,8 @@ Menu::Menu() {
                      "||-----------------------------||\n";
         std::cout << "\nChoose an option:\n"
                      "[1] Toy-Graphs Data Set\n"
-                     "[2] Extra fully connected Data Set\n"
-                     "[3] Real world Data Set\n"
+                     "[2] Extra Fully Connected Data Set\n"
+                     "[3] Real World Data Set\n"
                      "> ";
         std::cin >> option;
         switch (option) {

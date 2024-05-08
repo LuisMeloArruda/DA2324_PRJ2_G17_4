@@ -13,14 +13,32 @@ public:
     Menu();
 
     /**
-     * @brief Displays the Main Menu options.
+     * @brief Displays Main Menu options.
      *
      * Complexity:
      *
      */
     void mainMenu();
+    /**
+     * @brief Displays Toy Graph options.
+     *
+     * Complexity:
+     *
+     */
     void ToyGraph();
+    /**
+     * @brief Displays Extra Fully Connected Graph options.
+     *
+     * Complexity:
+     *
+     */
     void ExtraFullyConnected();
+    /**
+     * @brief Displays Real World Graph options.
+     *
+     * Complexity:
+     *
+     */
     void RealWorld();
 
 private:
