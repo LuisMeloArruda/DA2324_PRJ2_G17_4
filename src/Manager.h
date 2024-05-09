@@ -10,6 +10,7 @@
 #include <cmath>
 #include <unordered_set>
 #include <float.h>
+#include <iomanip>
 
 
 class Manager {
@@ -17,48 +18,48 @@ private:
     Graph<Location> graph;
 public:
     /**
-     * @brief
+     * @brief Reads edge information from a file and adds bidirectional edges.
      *
-     * Complexity:
+     * Complexity: O(n), where n is the number of edges in the file.
      *
-     * @param path
+     * @param path The path to the file containing edge information.
      */
     void readEdges(std::string path);
     /**
-     * @brief
+     * @brief Reads node information from a file and adds vertices to the graph.
      *
-     * Complexity:
+     * Complexity: O(n), where n is the number of nodes in the file.
      *
-     * @param path
-     * @param number_vertex
+     * @param path The path to the file containing edge information.
+     * @param number_vertex The number of vertices to read from the file.
      */
     void readNodes(std::string path, int number_vertex);
     /**
-     * @brief
+     * @brief Reads toy node information from a file and adds vertices and edges to the graph.
      *
-     * Complexity:
+     * Complexity: O(n), where n is the number of nodes in the file.
      *
-     * @param path
+     * @param path The path to the file containing edge information.
      */
     void readToyNodes(std::string path);
     /**
-     * @brief
+     * @brief Executes the backtracking algorithm to find an optimal path.
      *
-     * Complexity:
+     * Complexity: O(2^V), where V is the number of vertices in the graph.
      *
      */
     void Backtracking();
     /**
-     * @brief
+     * @brief Auxiliary function for backtracking algorithm.
      *
-     * Complexity:
+     * Complexity: O(2^V * E), where V is the number of vertices and E is the number of edges.
      *
-     * @param count
-     * @param currPos
-     * @param cost
-     * @param ans
-     * @param path
-     * @param aux
+     * @param count The current count of visited vertices.
+     * @param currPos The current position of the vertex in the graph.
+     * @param cost The current cost of the path.
+     * @param ans The current optimal cost.
+     * @param path The vector storing the optimal path.
+     * @param aux The auxiliary vector storing the current path being explored.
      */
     void auxBacktracking(unsigned int count, Vertex<Location>* currPos, double cost, double &ans, vector<Location> &path, vector<Location> &aux);
     /**
@@ -115,7 +116,7 @@ public:
 
     void printOptimalPath(vector<Location> path, double cost);
 
-    void auxDFS(Vertex<Location>* v, vector<Vertex<Location>*>& path, double cost);
+    void auxDFS(Vertex<Location>* v, vector<Vertex<Location>*>& path, double& cost);
 };
 
 

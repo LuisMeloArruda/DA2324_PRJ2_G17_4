@@ -107,7 +107,7 @@ void Manager::Backtracking() {
 
     auxBacktracking(count, startPoint, cost, ans, path, aux);
 
-    printOptimalPath(path, cost);
+    printOptimalPath(path, ans);
 }
 
 void Manager::auxBacktracking(unsigned int count, Vertex<Location>* currPos, double cost,
@@ -270,16 +270,15 @@ void Manager::Other_Heuristics() {
     }
 
     // Third Step: Find Perfect Matching of odd Vertex -> O(V³)
-    graph.perfectMatch(oddDegreeVertex);
+    //graph.perfectMatch(oddDegreeVertex);
 
     // Fourth Step: DFS search using only selected edges and using short-cutting -> O(V+E)
     std::vector<Vertex<Location>*> path;
     double cost = 0;
     for (Vertex<Location>* v : graph.getVertexSet())
         v->setVisited(false);
-    for (Vertex<Location>* v : graph.getVertexSet())
-        if (!v->isVisited())
-            auxDFS(v, path, cost);
+    Vertex<Location>* startPoint = graph.findVertex(Location(0));
+    auxDFS(startPoint, path, cost);
 
     // Fifth Step: Add cost of going back to beginning
     bool found = false;
@@ -300,7 +299,7 @@ void Manager::Other_Heuristics() {
     printOptimalPath(locations, cost);
 }
 
-void Manager::auxDFS(Vertex<Location>* v, vector<Vertex<Location>*>& path, double cost) {
+void Manager::auxDFS(Vertex<Location>* v, vector<Vertex<Location>*>& path, double& cost) {
     v->setVisited(true);
     path.push_back(v);
     for (Edge<Location>* e : v->getAdj()) {
@@ -347,7 +346,7 @@ bool Manager::crescente(Edge<Location> *primeiro, Edge<Location> *segundo) {
 }
 
 void Manager::printOptimalPath(vector<Location> path, double cost) {
-    cout << "The calculated route is " << cost << " meters long and is as follows:" << endl;
+    cout << "The calculated route is " << std::fixed << std::setprecision(2) << cost << " meters long and is as follows:" << endl;
     for (int i = 0; i < graph.getVertexSet().size(); i++) {
         cout << "LOCATION " << i << ": " << path[i].getId();
         if (!path[i].getLabel().empty()) cout << " - " << path[i].getLabel();

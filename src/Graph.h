@@ -1,5 +1,5 @@
-#ifndef DA2324_PRJ1_G17_4_GRAPH_H
-#define DA2324_PRJ1_G17_4_GRAPH_H
+#ifndef DA2324_PRJ2_G17_4_GRAPH_H
+#define DA2324_PRJ2_G17_4_GRAPH_H
 
 #include <iostream>
 #include <vector>
@@ -668,6 +668,7 @@ void Graph<T>::MST() {
         if (ufds.findSet(e->getOrig()->getInfo().getId()) != ufds.findSet(e->getDest()->getInfo().getId())) {
             ufds.linkSets(e->getOrig()->getInfo().getId(), e->getDest()->getInfo().getId());
             e->setSelected(true);
+            e->getReverse()->setSelected(true);
         }
     }
 }
@@ -747,4 +748,4 @@ template <class T>
 bool Graph<T>::ascending(Edge<T> *first, Edge<T> *second) {
     return first->getWeight() < second->getWeight();
 }
-#endif //DA2324_PRJ1_G17_4_GRAPH_H
+#endif //DA2324_PRJ2_G17_4_GRAPH_H

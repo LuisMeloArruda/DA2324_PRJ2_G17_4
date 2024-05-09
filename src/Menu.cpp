@@ -156,6 +156,7 @@ void Menu::mainMenu() {
                     network.Triangular_Heuristic();
                     break;
                 case 3:
+                    network.Other_Heuristics();
                     break;
                 case 4:
                     break;
