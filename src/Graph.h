@@ -692,8 +692,8 @@ void Graph<T>::perfectMatch(const vector<Vertex<T>*>& odd) {
     // arestas elegíveis
     while (i >= 0) {
         Vertex<T>* v = odd[i];
-        for (Edge<T>* e: v->getIncoming()) { // erro veio daqui
-            if ((e->getOrig->getIndegree() % 2 != 0) && (e->getOrig()->getInfo().getId() > v->getInfo().getId())) {
+        for (Edge<T>* e: v->getAdj()) {
+            if ((find(odd.begin(), odd.end(), e->getDest()) != odd.end()) && (e->getOrig()->getInfo().getId() > v->getInfo().getId())) {
                 edges.push_back(e);
             }
         }
@@ -701,18 +701,17 @@ void Graph<T>::perfectMatch(const vector<Vertex<T>*>& odd) {
     }
     // ordenar pela distância
     std::sort(edges.begin(), edges.end(), [](Edge<T> *first, Edge<T> *second) {
-        return second->getAdj() > first->getDest(); // mudar
+        return second->getWeight() > first->getWeight();
     });
     // match
     int count = 0;
     for (auto e: edges) {
-        if (!(e->getDest()->isVisited() && e->getOrig()->isVisited())) {
+        if ((!e->getDest()->isVisited() && !e->getOrig()->isVisited())) {
             e->getDest()->setVisited(true);
             e->getOrig()->setVisited(true);
-            auto origin = e->getDest()->addEdge(e->getOrig(), e->getDest());
-            auto destination = e->getOrig()->addEdge(e->getAdj(), e->getDest());
-            origin->setReverse(destination);
-            destination->setReverse(origin);
+
+            e->setSelected(true);
+            e->getReverse()->setSelected(true);
             count++; count++;
         }
         if (count == odd.size()) return;

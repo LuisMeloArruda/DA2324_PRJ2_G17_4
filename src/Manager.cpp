@@ -270,7 +270,7 @@ void Manager::Other_Heuristics() {
     }
 
     // Third Step: Find Perfect Matching of odd Vertex -> O(V³)
-    //graph.perfectMatch(oddDegreeVertex);
+    graph.perfectMatch(oddDegreeVertex);
 
     // Fourth Step: DFS search using only selected edges and using short-cutting -> O(V+E)
     std::vector<Vertex<Location>*> path;
