@@ -117,6 +117,8 @@ public:
     void printOptimalPath(vector<Location> path, double cost);
 
     void auxDFS(Vertex<Location>* v, vector<Vertex<Location>*>& path, double& cost);
+
+    void clearGraph();
 };
 
 

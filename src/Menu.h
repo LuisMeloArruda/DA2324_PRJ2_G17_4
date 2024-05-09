@@ -18,7 +18,7 @@ public:
      * Complexity:
      *
      */
-    void mainMenu();
+    int mainMenu();
     /**
      * @brief Displays Toy Graph options.
      *

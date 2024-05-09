@@ -356,3 +356,10 @@ void Manager::printOptimalPath(vector<Location> path, double cost) {
     if (!path[0].getLabel().empty()) cout << " - " << path[0].getLabel();
     cout << endl;
 }
+
+void Manager::clearGraph() {
+    int graphSize = graph.getVertexSet().size();
+    for (int i = 0; i < graphSize; i++) {
+        graph.removeVertex(Location(i));
+    }
+}

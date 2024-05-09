@@ -93,7 +93,7 @@ void Menu::RealWorld() {
 Menu::Menu() {
     network = Manager();
     int option;
-    while (true) {
+    do {
         std::cout << "\n\n"
                      "||-----------------------------||\n"
                      "||    Which Data Set Do You    ||\n"
@@ -119,12 +119,10 @@ Menu::Menu() {
                 std::cout << "Invalid option.\n";
                 continue;
         }
-        break;
-    }
-    mainMenu();
+    } while (mainMenu());
 }
 
-void Menu::mainMenu() {
+int Menu::mainMenu() {
     while (true) {
         std::cout << "\n\n\n"
                      "||-------------------------------------------------------------||\n"
@@ -136,6 +134,7 @@ void Menu::mainMenu() {
                      "[2] Triangular Approximation Heuristic\n"
                      "[3] Other Heuristics\n"
                      "[4] Traveling Salesman in the Real World\n"
+                     "[5] Change Data Set\n"
                      "> ";
         int option;
         std::cin >> option;
@@ -160,6 +159,9 @@ void Menu::mainMenu() {
                     break;
                 case 4:
                     break;
+                case 5:
+                    network.clearGraph();
+                    return 1;
                 default:
                     std::cout << "Invalid option.\n";
                     continue;
