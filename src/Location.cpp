@@ -1,6 +1,6 @@
 #include "Location.h"
 
-unsigned int Location::getId() {
+unsigned int Location::getId() const {
     return this->id;
 }
 

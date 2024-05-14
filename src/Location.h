@@ -50,7 +50,7 @@ class Location {
          *
          * @return
          */
-        unsigned int getId();
+        unsigned int getId() const;
         /**
          * @brief
          *

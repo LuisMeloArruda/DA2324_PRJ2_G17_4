@@ -266,7 +266,7 @@ void Manager::Other_Heuristics() {
     // Second Step: Get vertex with odd degree -> O(V)
     vector<Vertex<Location>*> oddDegreeVertex;
     for (Vertex<Location>* v: graph.getVertexSet()) {
-        if (v->getAdj().size() % 2 != 0) oddDegreeVertex.push_back(v);
+        if (v->getIndegree() % 2 != 0) oddDegreeVertex.push_back(v);
     }
 
     // Third Step: Find Perfect Matching of odd Vertex -> O(V³)
@@ -346,7 +346,6 @@ bool Manager::crescente(Edge<Location> *primeiro, Edge<Location> *segundo) {
 }
 
 void Manager::printOptimalPath(vector<Location> path, double cost) {
-    cout << "The calculated route is " << std::fixed << std::setprecision(2) << cost << " meters long and is as follows:" << endl;
     for (int i = 0; i < graph.getVertexSet().size(); i++) {
         cout << "LOCATION " << i << ": " << path[i].getId();
         if (!path[i].getLabel().empty()) cout << " - " << path[i].getLabel();
@@ -355,6 +354,7 @@ void Manager::printOptimalPath(vector<Location> path, double cost) {
     cout << "LOCATION " << graph.getVertexSet().size() << ": 0";
     if (!path[0].getLabel().empty()) cout << " - " << path[0].getLabel();
     cout << endl;
+    cout << "The calculated route is " << std::fixed << std::setprecision(2) << cost << " meters long." << endl;
 }
 
 void Manager::clearGraph() {
