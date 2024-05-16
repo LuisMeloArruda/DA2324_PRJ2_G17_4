@@ -145,6 +145,7 @@ int Menu::mainMenu() {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             mainMenu();
         } else {
+            auto start = chrono::high_resolution_clock::now();
             switch (option) {
                 case 0:
                     exit(0);
@@ -155,7 +156,7 @@ int Menu::mainMenu() {
                     network.Triangular_Heuristic();
                     break;
                 case 3:
-                    network.Other_Heuristics();
+                    network.TSP_NearestNeighbor();
                     break;
                 case 4:
                     break;
@@ -166,6 +167,9 @@ int Menu::mainMenu() {
                     std::cout << "Invalid option.\n";
                     continue;
             }
+            auto end = chrono::high_resolution_clock::now();
+            auto duration = chrono::duration_cast<chrono::milliseconds>(end - start);
+            cout << "Time taken for algorithm: " << duration.count() << " milliseconds" << endl;
         }
     }
 }

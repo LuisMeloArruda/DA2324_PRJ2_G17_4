@@ -162,6 +162,9 @@ void Manager::dfsKruskalPath(Vertex<Location> *v, vector<Edge<Location>*> &preor
 }
 
 void Manager::Triangular_Heuristic() {
+    // TO PRINT OUTPUT LATER
+    std::vector<Vertex<Location>*> path;
+
     // RESETS THE VISITED FLAG OF VERTICES AND THE SELECTED FLAG OF EDGES IN THE GRAPH
     // PUTS THE EDGES IN A VECTOR
     vector<Edge<Location>*> vec;
@@ -193,8 +196,9 @@ void Manager::Triangular_Heuristic() {
 
     // ALGORITHM TO ELIMINATE DUPLICATES FROM THE PREORDER AND SUM THE WEIGHT OF THE EDGES
     unordered_set<int> visitedVertices; // UNORDERED_SET TO LIMIT PASSAGE TO 1 AT EACH POINT
-    visitedVertices.insert(0);
-    int last_inserted = 0; // STORES THE LAST INSERTED POINT IN THE UNORDERED_SET
+    visitedVertices.insert(graph.getVertexSet().at(0)->getInfo().getId());
+    path.push_back(graph.getVertexSet().at(0));
+    int last_inserted = graph.getVertexSet().at(0)->getInfo().getId(); // STORES THE LAST INSERTED POINT IN THE UNORDERED_SET
     double cost = 0;
     bool added;
     for (Edge<Location> *e : preorder) {
@@ -216,6 +220,7 @@ void Manager::Triangular_Heuristic() {
                                       e->getDest()->getInfo().getLatitude(), e->getDest()->getInfo().getLongitude());
                 }
             }
+            path.push_back(e->getDest());
             visitedVertices.insert(e->getDest()->getInfo().getId());
             last_inserted = e->getDest()->getInfo().getId();
         }
@@ -238,6 +243,7 @@ void Manager::Triangular_Heuristic() {
                                       e->getOrig()->getInfo().getLatitude(), e->getOrig()->getInfo().getLongitude());
                 }
             }
+            path.push_back(e->getOrig());
             visitedVertices.insert(e->getOrig()->getInfo().getId());
             last_inserted = e->getOrig()->getInfo().getId();
         }
@@ -246,7 +252,7 @@ void Manager::Triangular_Heuristic() {
     added = false;
     Vertex<Location> *temp = graph.findVertex(last_inserted);
     for (Edge<Location> *e : temp->getAdj()) {
-        if (e->getDest()->getInfo().getId() == 0) {
+        if (e->getDest()->getInfo().getId() == graph.getVertexSet().at(0)->getInfo().getId()) {
             cost += e->getWeight();
             added = true;
         }
@@ -255,7 +261,62 @@ void Manager::Triangular_Heuristic() {
         cost += Haversine(temp->getInfo().getLatitude(), temp->getInfo().getLongitude(), graph.findVertex(0)->getInfo().getLatitude(),
                           graph.findVertex(0)->getInfo().getLongitude());
     }
-    std::cout << cost << endl;
+    path.push_back(graph.getVertexSet().at(0));
+    // Print found solution
+    std::vector<Location> locations;
+    for (Vertex<Location>* v : path)
+        locations.push_back(v->getInfo());
+    printOptimalPath(locations, cost);
+}
+
+Vertex<Location> *Manager::aux_NearestNeighbor(Vertex<Location> *vertex, double &distance, std::vector<Vertex<Location>*> &path)
+{
+    path.push_back(vertex);
+    vertex->setVisited(true);
+    double lowDistance = INFINITY;
+    Vertex<Location> *NextVertice = nullptr;
+    for (Edge<Location> *e : vertex->getAdj())
+    {
+        if (e->getWeight() < lowDistance && !e->getDest()->isVisited())
+        {
+            lowDistance = e->getWeight();
+            NextVertice = e->getDest();
+        }
+    }
+    if (NextVertice != nullptr)
+    {
+        distance += lowDistance;
+        return aux_NearestNeighbor(NextVertice, distance, path);
+    }
+    return vertex;
+}
+
+void Manager::TSP_NearestNeighbor() {
+    // RESETS THE VISITED FLAG OF VERTICES AND THE SELECTED FLAG OF EDGES IN THE GRAPH
+    for (Vertex<Location> *v : graph.getVertexSet()) {
+        v->setVisited(false);
+        for (Edge<Location> *e : v->getAdj()) {
+            e->setSelected(false);
+        }
+    }
+
+    std::vector<Vertex<Location>*> path;
+    double distance = 0;
+    Vertex<Location> *initialVertice = graph.getVertexSet().at(0);
+    Vertex<Location> *finalVertice = aux_NearestNeighbor(initialVertice, distance, path);
+    path.push_back(initialVertice);
+    for (Edge<Location> *e : finalVertice->getAdj())
+    {
+        if (e->getDest() == graph.getVertexSet().at(0))
+        {
+            distance += e->getWeight();
+        }
+    }
+    // Print found solution
+    std::vector<Location> locations;
+    for (Vertex<Location>* v : path)
+        locations.push_back(v->getInfo());
+    printOptimalPath(locations, distance);
 }
 
 void Manager::Other_Heuristics() {
@@ -346,12 +407,21 @@ bool Manager::crescente(Edge<Location> *primeiro, Edge<Location> *segundo) {
 }
 
 void Manager::printOptimalPath(vector<Location> path, double cost) {
+    /*
     for (int i = 0; i < graph.getVertexSet().size(); i++) {
         cout << "LOCATION " << i << ": " << path[i].getId();
         if (!path[i].getLabel().empty()) cout << " - " << path[i].getLabel();
         cout << endl;
+    }*/
+    for (int k = 0; k < path.size() - 1; k++)
+    {
+        cout << path[k].getId();
+        if (k % 20 == 0 && k != 0) cout << " .. " << endl << " .. ";
+        else cout << " ---> ";
     }
-    cout << "LOCATION " << graph.getVertexSet().size() << ": 0";
+    cout << path[path.size() - 1].getId() << endl;
+    if (path[0].getId() == path[path.size()-1].getId()) cout << " You found your way, well done!^^ " << endl;
+
     if (!path[0].getLabel().empty()) cout << " - " << path[0].getLabel();
     cout << endl;
     cout << "The calculated route is " << std::fixed << std::setprecision(2) << cost << " meters long." << endl;
