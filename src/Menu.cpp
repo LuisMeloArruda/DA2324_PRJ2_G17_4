@@ -145,6 +145,7 @@ int Menu::mainMenu() {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             mainMenu();
         } else {
+            auto start = chrono::high_resolution_clock::now();
             switch (option) {
                 case 0:
                     exit(0);
@@ -155,7 +156,7 @@ int Menu::mainMenu() {
                     Triangular_Heuristic();
                     break;
                 case 3:
-                    Other_Heuristics();
+                    TSP_NearestNeighbor();
                     break;
                 case 4:
                     break;
@@ -166,6 +167,9 @@ int Menu::mainMenu() {
                     std::cout << "Invalid option.\n";
                     continue;
             }
+            auto end = chrono::high_resolution_clock::now();
+            auto duration = chrono::duration_cast<chrono::milliseconds>(end - start);
+            cout << "Time taken for algorithm: " << duration.count() << " milliseconds" << endl;
         }
     }
 }
@@ -190,10 +194,10 @@ void Menu::Triangular_Heuristic() {
     std::cout << "\nExecution Time: " << time << " milliseconds\n\n";
 }
 
-void Menu::Other_Heuristics() {
+void Menu::TSP_NearestNeighbor() {
     std::cout << "\nLoading... \n\n";
     std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-    network.Other_Heuristics();
+    network.TSP_NearestNeighbor();
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::chrono::duration<double, std::milli> duration = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(end - start);
     double time = duration.count();

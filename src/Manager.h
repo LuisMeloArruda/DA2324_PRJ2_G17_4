@@ -11,6 +11,7 @@
 #include <unordered_set>
 #include <float.h>
 #include <iomanip>
+#include <limits.h>
 
 
 class Manager {
@@ -76,6 +77,21 @@ public:
      *
      */
     void Other_Heuristics();
+    /**
+    * @brief Implements other heuristics (Nearest Neighbor) for the Traveling Salesman Problem (TSP).
+    *
+    * Complexity:
+    *
+    */
+    void TSP_NearestNeighbor();
+    /**
+     * @brief Returns distance
+     *
+     * Complexity:
+     * @param Vertice
+     * @param distance
+     */
+    Vertex<Location> *aux_NearestNeighbor(Vertex<Location> *Vertice, double &distance, std::vector<Vertex<Location>*> &path);
     /**
      * @brief Converts a coordinate from degrees to radians.
      *

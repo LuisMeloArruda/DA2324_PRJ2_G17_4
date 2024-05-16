@@ -52,7 +52,7 @@ public:
 
     void Triangular_Heuristic();
 
-    void Other_Heuristics();
+    void TSP_NearestNeighbor();
 
 private:
     Manager network;
