@@ -152,10 +152,10 @@ int Menu::mainMenu() {
                     Backtracking();
                     break;
                 case 2:
-                    network.Triangular_Heuristic();
+                    Triangular_Heuristic();
                     break;
                 case 3:
-                    network.Other_Heuristics();
+                    Other_Heuristics();
                     break;
                 case 4:
                     break;
@@ -174,6 +174,26 @@ void Menu::Backtracking() {
     std::cout << "\nLoading... \n\n";
     std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
     network.Backtracking();
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::chrono::duration<double, std::milli> duration = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(end - start);
+    double time = duration.count();
+    std::cout << "\nExecution Time: " << time << " milliseconds\n\n";
+}
+
+void Menu::Triangular_Heuristic() {
+    std::cout << "\nLoading... \n\n";
+    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+    network.Triangular_Heuristic();
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::chrono::duration<double, std::milli> duration = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(end - start);
+    double time = duration.count();
+    std::cout << "\nExecution Time: " << time << " milliseconds\n\n";
+}
+
+void Menu::Other_Heuristics() {
+    std::cout << "\nLoading... \n\n";
+    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+    network.Other_Heuristics();
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::chrono::duration<double, std::milli> duration = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(end - start);
     double time = duration.count();

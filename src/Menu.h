@@ -50,6 +50,10 @@ public:
      */
     void Backtracking();
 
+    void Triangular_Heuristic();
+
+    void Other_Heuristics();
+
 private:
     Manager network;
 };
