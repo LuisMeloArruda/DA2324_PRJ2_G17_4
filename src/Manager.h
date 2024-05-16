@@ -63,61 +63,85 @@ public:
      */
     void auxBacktracking(unsigned int count, Vertex<Location>* currPos, double cost, double &ans, vector<Location> &path, vector<Location> &aux);
     /**
-     * @brief
+     * @brief Implements a heuristic based on the triangular inequality to approximate the Traveling Salesman Problem (TSP) solution.
      *
-     * Complexity:
+     * Complexity: O(E log E), where E is the number of edges and V is the number of vertices.
      *
      */
     void Triangular_Heuristic();
-
-    void Other_Heuristics();
-
-    void Traveling_Salesman();
     /**
-     * @brief
+     * @brief Implements other heuristics (Christofides) for the Traveling Salesman Problem (TSP).
      *
-     * Complexity:
+     * Complexity: O(V^3), where V is the number of vertices and E is the number of edges.
      *
-     * @param cord
-     * @return
+     */
+    void Other_Heuristics();
+    /**
+     * @brief Converts a coordinate from degrees to radians.
+     *
+     * Complexity: O(1)
+     *
+     * @param cord The coordinate in degrees.
+     *
+     * @return The coordinate in radians.
      */
     double convert_to_radians(double cord);
     /**
-     * @brief
+     * @brief Computes the Haversine distance between two geographic coordinates.
      *
-     * Complexity:
+     * Complexity: O(1)
      *
-     * @param lat1
-     * @param lon1
-     * @param lat2
-     * @param lon2
-     * @return
+     * @param lat1 Latitude of the first point.
+     * @param lon1 Longitude of the first point.
+     * @param lat2 Latitude of the second point.
+     * @param lon2 Longitude of the second point.
+     * @return The Haversine distance in meters.
      */
     double Haversine(double lat1, double lon1, double lat2, double lon2);
     /**
-     * @brief
+     * @brief Depth-First Search (DFS) to find the path in the MST created by Kruskal's algorithm.
      *
-     * Complexity:
+     * Complexity: O(V + E), where V is the number of vertices and E is the number of edges.
      *
-     * @param v
-     * @param preorder
+     * @param v The starting vertex.
+     * @param preorder The vector to store the preorder traversal of edges.
      */
     void dfsKruskalPath(Vertex<Location> *v, vector<Edge<Location>*> &preorder);
     /**
-     * @brief
+     * @brief Comparator function to sort edges in ascending order of weight.
      *
-     * Complexity:
+     * Complexity: O(1)
      *
-     * @param primeiro
-     * @param segundo
-     * @return
+     * @param primeiro The first edge.
+     * @param segundo The second edge.
+     * @return True if the weight of the first edge is less than the weight of the second edge, false otherwise.
      */
     static bool crescente(Edge<Location> *primeiro, Edge<Location> *segundo);
-
+    /**
+     * @brief Prints the optimal path found and its cost.
+     *
+     * Complexity: O(V), where V is the number of vertices.
+     *
+     * @param path The vector containing the sequence of locations.
+     * @param cost The total cost of the path.
+     */
     void printOptimalPath(vector<Location> path, double cost);
-
+    /**
+     * @brief Auxiliary Depth-First Search (DFS) to find the path and cost in the graph.
+     *
+     * Complexity: O(V + E), where V is the number of vertices and E is the number of edges.
+     *
+     * @param v The starting vertex.
+     * @param path The vector to store the sequence of vertices.
+     * @param cost The total cost of the path.
+     */
     void auxDFS(Vertex<Location>* v, vector<Vertex<Location>*>& path, double& cost);
-
+    /**
+     * @brief Clears the graph by removing all vertices.
+     *
+     * Complexity: O(V), where V is the number of vertices in the graph.
+     *
+     */
     void clearGraph();
 };
 

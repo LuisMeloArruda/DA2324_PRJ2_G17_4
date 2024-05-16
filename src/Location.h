@@ -12,108 +12,109 @@ class Location {
         /**
          * @brief Constructor of Location class with the given id, longitude, and latitude.
          *
-         * Complexity:
+         * Complexity: O(1)
          *
          * @param id Identifier of the location.
-         * @param longitude llongitude of the location.
+         * @param longitude Longitude of the location.
          * @param latitude
          */
         Location(unsigned int id, double longitude, double latitude): id(id), longitude(longitude), latitude(latitude) {}
         /**
-         * @brief
+         * @brief Default constructor of Location class, initializing all values to its default.
          *
-         * Complexity:
+         * Complexity: O(1)
          *
          */
         Location(): id(0), longitude(0.0), latitude(0.0), label("") {}
         /**
-         * @brief
+         * @brief Constructor of Location class with the given id and label.
          *
-         * Complexity:
+         * Complexity: O(1)
          *
-         * @param id
-         * @param label
+         * @param id Identifier of the location.
+         * @param label Label of the location.
          */
         Location(unsigned int id, std::string label): id(id), label(label) {}
         /**
-         * @brief
+         * @brief Constructor of Location class with the given id.
          *
-         * Complexity:
+         * Complexity: O(1)
          *
-         * @param id
+         * @param id Identifier of the location.
          */
         Location(unsigned int id) : id(id) {}
         /**
-         * @brief
+         * @brief Get the id of the location.
          *
-         * Complexity:
+         * Complexity: O(1)
          *
-         * @return
+         * @return Id of the location.
          */
         unsigned int getId() const;
         /**
-         * @brief
+         * @brief Get the longitude of the location.
          *
-         * Complexity:
+         * Complexity: O(1)
          *
-         * @return
+         * @return Longitude of the location.
          */
         double getLongitude();
         /**
-         * @brief
+         * @brief Get the latitude of the location.
          *
-         * Complexity:
+         * Complexity: O(1)
          *
-         * @return
+         * @return Latitude of the location.
          */
         double getLatitude();
         /**
-         * @brief
+         * @brief Get the label of the location.
          *
-         * Complexity:
+         * Complexity: O(1)
          *
-         * @return
+         * @return Label of the location.
          */
         std::string getLabel();
         /**
-         * @brief
+         * @brief Set the id of the location.
          *
-         * Complexity:
+         * Complexity: O(1)
          *
-         * @param Id
+         * @param Id New identifier of the location.
          */
         void setId(unsigned int Id);
         /**
-         * @brief
+         * @brief Set the longitude of the location.
          *
-         * Complexity:
+         * Complexity: O(1)
          *
-         * @param Longitude
+         * @param Longitude New longitude for the location.
          */
         void setLongitude(double Longitude);
         /**
-         * @brief
+         * @brief Set the latitude of the location.
          *
-         * Complexity:
+         * Complexity: O(1)
          *
-         * @param Latitude
+         * @param Latitude New latitude for the location.
          */
         void setLatitude(double Latitude);
         /**
-         * @brief
+         * @brief Set the label of the location.
          *
-         * Complexity:
+         * Complexity: O(1)
          *
-         * @param Label
+         * @param Label New label for the location.
          */
         void setLabel(std::string Label);
         /**
-         * @brief
+         * @brief Equality operator to compare two locations based on their id.
          *
-         * Complexity:
+         * Complexity: O(1)
          *
-         * @param b
-         * @return
+         * @param b The other location to compare with.
+         *
+         * @return True if the ids of both locations are equal, false otherwise.
          */
         bool operator==(const Location &b) const;
 };

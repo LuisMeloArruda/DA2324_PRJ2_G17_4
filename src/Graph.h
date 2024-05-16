@@ -118,55 +118,56 @@ public:
     bool isDAG() const;
     bool dfsIsDAG(Vertex<T> *v) const;
     std::vector<T> topsort() const;
+
     // auxiliary functions
     /**
-     * @brief
+     * @brief Computes the Minimum Spanning Tree (MST) of the graph using Kruskal's algorithm.
      *
-     * Complexity:
+     * Complexity: O(E log E), where E is the number of edges in the graph.
      *
      */
     void MST();
     /**
-     * @brief
+     * @brief Finds and returns the vertices with an odd degree.
      *
-     * Complexity:
+     * Complexity: O(V), where V is the number of vertices in the graph.
      *
-     * @return
+     * @return A vector of pointers to vertices with an odd degree.
      */
     vector<Vertex<T> *> oddVertex();
     /**
-     * @brief
+     * @brief Sorts edges in ascending order based on their weight.
      *
-     * Complexity:
+     * Complexity: O(1)
      *
-     * @param first
-     * @param second
-     * @return
+     * @param first The first edge to compare.
+     * @param second The second edge to compare.
+     * @return True if the weight of the first edge is less than the weight of the second edge, false otherwise.
      */
     static bool ascending(Edge<T> *first, Edge<T> *second);
     /**
-     * @brief
+     * @brief Finds the perfect matching for the odd degree vertices and marks the selected edges.
      *
-     * Complexity:
+     * Complexity: O(V^2), where V is the number of vertices in the graph.
      *
-     * @param odd
+     * @param odd A vector of pointers to vertices with an odd degree.
      */
     void perfectMatch(const vector<Vertex<T>*>& odd);
     /**
-     * @brief
+     * @brief Finds and returns an Eulerian tour in the graph.
      *
-     * Complexity:
+     * Complexity: O(V + E), where V is the number of vertices and E is the number of edges in the graph.
      *
-     * @return
+     * @return A stack representing the Eulerian tour.
      */
     stack<Vertex<T> *> eulerianTour();
     /**
-     * @brief
+     * @brief Auxiliary method to find an Eulerian tour recursively.
      *
-     * Complexity:
+     * Complexity: O(V + E), where V is the number of vertices and E is the number of edges in the graph.
      *
-     * @param vertex
-     * @param tour
+     * @param vertex The current vertex in the tour.
+     * @param tour The stack representing the Eulerian tour.
      */
     void auxEulerianTour(Vertex<T>* vertex, stack<Vertex<T> *> &tour);
 

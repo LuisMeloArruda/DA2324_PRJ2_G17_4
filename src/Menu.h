@@ -9,41 +9,43 @@ class Menu {
 public:
     /**
      * @brief Constructor for the Menu class.
+     *
+     * Complexity: O(1)
      */
     Menu();
 
     /**
      * @brief Displays Main Menu options.
      *
-     * Complexity:
+     * Complexity: O(2^V), where V is the number of vertices in the graph.
      *
      */
     int mainMenu();
     /**
      * @brief Displays Toy Graph options.
      *
-     * Complexity:
+     * Complexity: O(n), where n is the number of nodes in the file.
      *
      */
     void ToyGraph();
     /**
      * @brief Displays Extra Fully Connected Graph options.
      *
-     * Complexity:
+     * Complexity: O(n), where n is the number of nodes in the file.
      *
      */
     void ExtraFullyConnected();
     /**
      * @brief Displays Real World Graph options.
      *
-     * Complexity:
+     * Complexity: O(n), where n is the number of nodes in the file.
      *
      */
     void RealWorld();
     /**
-     * @brief
+     * @brief Executes Backtracking algorithm.
      *
-     * Complexity:
+     * Complexity: O(2^V), where V is the number of vertices in the graph.
      *
      */
     void Backtracking();
