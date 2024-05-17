@@ -12,6 +12,7 @@
 #include <float.h>
 #include <iomanip>
 #include <limits.h>
+#include <set>
 
 
 class Manager {
@@ -77,6 +78,13 @@ public:
      *
      */
     void Other_Heuristics();
+     /**
+    * @brief Implements other heuristics (Nearest Neighbor) for the Traveling Salesman Problem (TSP). (Assuming Fully Connected)
+    *
+    * Complexity:
+    *
+    */
+    void TSP_NearestNeighborComplete();
     /**
     * @brief Implements other heuristics (Nearest Neighbor) for the Traveling Salesman Problem (TSP).
     *

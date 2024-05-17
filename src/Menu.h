@@ -54,6 +54,8 @@ public:
 
     void TSP_NearestNeighbor();
 
+    void TSP_NearestNeighborComplete();
+
 private:
     Manager network;
 };

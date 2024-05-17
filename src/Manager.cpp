@@ -296,6 +296,78 @@ Vertex<Location> *Manager::aux_NearestNeighbor(Vertex<Location> *vertex, double 
     return vertex;
 }
 
+void Manager::TSP_NearestNeighborComplete() {
+    // RESETS THE VISITED FLAG OF VERTICES AND THE SELECTED FLAG OF EDGES IN THE GRAPH
+    for (Vertex<Location> *v : graph.getVertexSet()) {
+        v->setVisited(false);
+        for (Edge<Location> *e : v->getAdj()) {
+            e->setSelected(false);
+        }
+    }
+
+    // Place unvisited vertex in set
+    std::set<int> unvisited;
+    for (int i = 1; i < graph.getNumVertex(); ++i) {
+        unvisited.emplace_hint(unvisited.end(), i);
+    }
+    std::vector<Vertex<Location>*> path;
+    double distance = 0;
+    Vertex<Location> *current = graph.getVertexSet().at(0);
+    path.push_back(current);
+    Vertex<Location> *next = nullptr;
+    current->setVisited(true);
+    while (current != nullptr) {
+        next = nullptr;
+        double nearestDistance = INFINITY;
+        std::vector<int> tested(graph.getNumVertex(), 0);
+        tested[current->getInfo().getId()] = 1;
+        for (Edge<Location>* e : current->getAdj()) {
+            tested[e->getDest()->getInfo().getId()] = 1;
+            if (!e->getDest()->isVisited()) {
+                if (e->getWeight() < nearestDistance) {
+                    nearestDistance = e->getWeight();
+                    next = e->getDest();
+                }
+            }
+        }
+        for (auto itr = unvisited.begin(); itr != unvisited.end(); itr++) {
+            if (tested[*itr]) continue;
+            Vertex<Location>* target = graph.findVertex(Location(*itr));
+            double temp = Haversine(current->getInfo().getLatitude(), current->getInfo().getLongitude(), 
+                                    target->getInfo().getLatitude(), target->getInfo().getLongitude());
+            if (temp < nearestDistance) {
+                nearestDistance = temp;
+                next = target;
+            }
+        }
+        if (next != nullptr) {
+            distance += nearestDistance;
+            path.push_back(next);
+            next->setVisited(true);
+            unvisited.erase(next->getInfo().getId());
+        }
+        current = next;
+    }
+    if (path.size() != graph.getNumVertex()) {
+        cout << "Solution Not Found" << endl;
+        return;
+    }
+    bool found = false;
+    for (Edge<Location> *e : path.back()->getAdj()) {
+        if (e->getDest() == graph.getVertexSet().at(0)) {   
+            found = true;
+            distance += e->getWeight();
+        }
+    }
+    if (!found) {
+        distance += Haversine(path.back()->getInfo().getLatitude(), path.back()->getInfo().getLongitude(), 
+                    graph.getVertexSet().at(0)->getInfo().getLatitude(), graph.getVertexSet().at(0)->getInfo().getLongitude());
+    }
+    path.push_back(graph.getVertexSet().at(0));
+    // Print found solution
+    printOptimalPath(path, distance);
+}
+
 void Manager::TSP_NearestNeighbor() {
     // RESETS THE VISITED FLAG OF VERTICES AND THE SELECTED FLAG OF EDGES IN THE GRAPH
     for (Vertex<Location> *v : graph.getVertexSet()) {

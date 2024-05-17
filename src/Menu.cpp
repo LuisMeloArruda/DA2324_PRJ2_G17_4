@@ -156,9 +156,10 @@ int Menu::mainMenu() {
                     Triangular_Heuristic();
                     break;
                 case 3:
-                    TSP_NearestNeighbor();
+                    TSP_NearestNeighborComplete();
                     break;
                 case 4:
+                    TSP_NearestNeighbor();
                     break;
                 case 5:
                     network.clearGraph();
@@ -195,6 +196,16 @@ void Menu::TSP_NearestNeighbor() {
     std::cout << "\nLoading... \n\n";
     std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
     network.TSP_NearestNeighbor();
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::chrono::duration<double, std::milli> duration = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(end - start);
+    double time = duration.count();
+    std::cout << "\nExecution Time: " << time << " milliseconds\n\n";
+}
+
+void Menu::TSP_NearestNeighborComplete() {
+    std::cout << "\nLoading... \n\n";
+    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+    network.TSP_NearestNeighborComplete();
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::chrono::duration<double, std::milli> duration = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(end - start);
     double time = duration.count();
