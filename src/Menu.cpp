@@ -167,9 +167,6 @@ int Menu::mainMenu() {
                     std::cout << "Invalid option.\n";
                     continue;
             }
-            auto end = chrono::high_resolution_clock::now();
-            auto duration = chrono::duration_cast<chrono::milliseconds>(end - start);
-            cout << "Time taken for algorithm: " << duration.count() << " milliseconds" << endl;
         }
     }
 }
