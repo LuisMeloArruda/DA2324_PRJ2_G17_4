@@ -31,6 +31,8 @@ void Manager::readEdges(std::string path) {
 void Manager::readNodes(std::string path, int number_vertex) {
     std::fstream file(path);
 
+    graph.setSize(number_vertex);
+
     if (!file.is_open()) {
         std::cerr << "Error opening file!" << std::endl;
     }
@@ -57,6 +59,12 @@ void Manager::readNodes(std::string path, int number_vertex) {
 void Manager::readToyNodes(std::string path) {
     std::fstream file(path);
 
+    int size = 0;
+    if (path == "../Data/Toy-Graphs/shipping.csv") size = 14;
+    if (path == "../Data/Toy-Graphs/stadiums.csv") size = 11;
+    if (path == "../Data/Toy-Graphs/tourism.csv") size = 5;
+
+    graph.setSize(size);
     if (!file.is_open()) {
         std::cerr << "Error opening file!" << std::endl;
     }

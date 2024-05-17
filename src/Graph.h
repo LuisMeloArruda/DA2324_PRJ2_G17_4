@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <vector>
-#include <unordered_map>
 #include <queue>
 #include <limits>
 #include <utility>
@@ -110,6 +109,7 @@ public:
     bool removeEdge(const T &source, const T &dest);
     bool addBidirectionalEdge(const T &sourc, const T &dest, double w);
     int getNumVertex() const;
+    void setSize(int size);
     std::vector<Vertex<T> *> getVertexSet() const;
     std:: vector<T> dfs() const;
     std:: vector<T> dfs(const T & source) const;
@@ -172,7 +172,7 @@ public:
     void auxEulerianTour(Vertex<T>* vertex, stack<Vertex<T> *> &tour);
 
 protected:
-    std::unordered_map<int, Vertex<T> *> vertexSet;    // vertex set
+    std::vector<Vertex<T> *> vertexSet;    // vertex set
     double ** distMatrix = nullptr;   // dist matrix for Floyd-Warshall
     int **pathMatrix = nullptr;   // path matrix for Floyd-Warshall
 
@@ -221,7 +221,7 @@ void Vertex<T>::removeOutgoingEdges() {
     while (it != adj.end()) {
         Edge<T> *edge = *it;
         it = adj.erase(it);
-        deleteEdge(edge);
+        delete edge;
     }
 }
 
@@ -390,22 +390,18 @@ int Graph<T>::getNumVertex() const {
 }
 
 template <class T>
+void Graph<T>::setSize(int size) {
+    vertexSet.resize(size, nullptr);
+}
+
+template <class T>
 std::vector<Vertex<T> *> Graph<T>::getVertexSet() const {
-    vector<Vertex<T> *> vals;
-    vals.reserve(vertexSet.size());
-    for(auto kv : vertexSet) {
-        vals.push_back(kv.second);  
-    }
-    return vals;
+    return vertexSet;
 }
 
 template <class T>
 Vertex<T> * Graph<T>::findVertex(const T &in) const {
-    auto it = vertexSet.find(in.getId());
-    if (it != vertexSet.end()) {
-        return it->second;
-    }
-    return nullptr;
+    return vertexSet[in.getId()];
 }
 
 template <class T>
@@ -429,11 +425,8 @@ bool Graph<T>::removeVertex(const T &in) {
     Vertex<T>* v = findVertex(in);
     if (v == nullptr) return false;
     v->removeOutgoingEdges();
-    for (auto u : vertexSet) {
-        u.second->removeEdge(v->getInfo());
-    }
-    vertexSet.erase(vertexSet.find(in.getId()));
     delete v;
+    vertexSet[in.getId()] = nullptr;
     return true;
 }
 
@@ -653,8 +646,7 @@ void Graph<T>::MST() {
     // RESETS THE VISITED FLAG OF VERTICES AND THE SELECTED FLAG OF EDGES IN THE GRAPH
     // PUTS THE EDGES IN A VECTOR
     vector<Edge<T>*> vec;
-    for (auto kv : vertexSet) {
-        Vertex<T> *v = kv.second;
+    for (Vertex<T> *v : vertexSet) {
         v->setVisited(false);
         v->setIndegree(0);
         for (Edge<T> *e : v->getAdj()) {
@@ -688,8 +680,7 @@ void Graph<T>::MST() {
 template <class T>
 vector<Vertex<T> *> Graph<T>::oddVertex() {
     vector<Vertex<T>*> odd;
-    for (auto kv : vertexSet) {
-        Vertex<T> *v = kv.second;
+    for (Vertex<T> *v  : vertexSet) {
         if (!(v->getIndegree() % 2 == 0)) odd.push_back(v);
     }
     return odd;
@@ -731,8 +722,7 @@ void Graph<T>::perfectMatch(const vector<Vertex<T>*>& odd) {
 
 template <class T>
 stack<Vertex<T> *> Graph<T>::eulerianTour() {
-    for (auto kv : vertexSet) {
-        Vertex<T> *v = kv.second;
+    for (Vertex<T> *v : vertexSet) {
         for (Edge<T>* e: v->getAdj()) {
             e->setSelected(false);
             e->getReverse()->setSelected(false);
