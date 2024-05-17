@@ -309,6 +309,10 @@ void Manager::TSP_NearestNeighbor() {
     double distance = 0;
     Vertex<Location> *initialVertice = graph.getVertexSet().at(0);
     Vertex<Location> *finalVertice = aux_NearestNeighbor(initialVertice, distance, path);
+    if (path.size() != graph.getNumVertex()) {
+        cout << "Solution Not Found" << endl;
+        return;
+    }
     path.push_back(initialVertice);
     for (Edge<Location> *e : finalVertice->getAdj())
     {
