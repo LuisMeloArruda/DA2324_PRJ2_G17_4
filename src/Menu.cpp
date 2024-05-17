@@ -132,9 +132,10 @@ int Menu::mainMenu() {
                      "\n[0] Quit.\n"
                      "[1] Backtracking Algorithm\n"
                      "[2] Triangular Approximation Heuristic\n"
-                     "[3] Other Heuristics\n"
-                     "[4] Traveling Salesman in the Real World\n"
-                     "[5] Change Data Set\n"
+                     "[3] Nearest Neighbor\n"
+                     "[4] Other Heuristics\n"
+                     "[5] Traveling Salesman in the Real World\n"
+                     "[6] Change Data Set\n"
                      "> ";
         int option;
         std::cin >> option;
@@ -159,8 +160,11 @@ int Menu::mainMenu() {
                     TSP_NearestNeighbor();
                     break;
                 case 4:
+                    Other_Heuristics();
                     break;
                 case 5:
+                    break;
+                case 6:
                     network.clearGraph();
                     return 1;
                 default:
@@ -169,6 +173,16 @@ int Menu::mainMenu() {
             }
         }
     }
+}
+
+void Menu::Other_Heuristics() {
+    std::cout << "\nLoading... \n\n";
+    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+    network.Other_Heuristics();
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::chrono::duration<double, std::milli> duration = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(end - start);
+    double time = duration.count();
+    std::cout << "\nExecution Time: " << time << " milliseconds\n\n";
 }
 
 void Menu::Backtracking() {
