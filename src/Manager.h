@@ -134,6 +134,15 @@ public:
      */
     static bool crescente(Edge<Location> *primeiro, Edge<Location> *segundo);
     /**
+    * @brief Prints the optimal path found and its cost.
+    *
+    * Complexity: O(V), where V is the number of vertices.
+    *
+    * @param path The vector containing the pointers of the sequence of locations.
+    * @param cost The total cost of the path.
+    */
+    void printOptimalPath(vector<Vertex<Location>*> path, double cost);
+    /**
      * @brief Prints the optimal path found and its cost.
      *
      * Complexity: O(V), where V is the number of vertices.

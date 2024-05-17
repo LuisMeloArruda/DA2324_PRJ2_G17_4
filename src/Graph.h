@@ -704,7 +704,7 @@ void Graph<T>::perfectMatch(const vector<Vertex<T>*>& odd) {
     while (i >= 0) {
         Vertex<T>* v = odd[i];
         for (Edge<T>* e: v->getAdj()) {
-            if ((find(odd.begin(), odd.end(), e->getDest()) != odd.end()) && (e->getOrig()->getInfo().getId() > v->getInfo().getId())) {
+            if ((e->getDest()->getIndegree() % 2 != 0) && (e->getOrig()->getInfo().getId() > v->getInfo().getId())) {
                 edges.push_back(e);
             }
         }

@@ -263,10 +263,7 @@ void Manager::Triangular_Heuristic() {
     }
     path.push_back(graph.getVertexSet().at(0));
     // Print found solution
-    std::vector<Location> locations;
-    for (Vertex<Location>* v : path)
-        locations.push_back(v->getInfo());
-    printOptimalPath(locations, cost);
+    printOptimalPath(path, cost);
 }
 
 Vertex<Location> *Manager::aux_NearestNeighbor(Vertex<Location> *vertex, double &distance, std::vector<Vertex<Location>*> &path)
@@ -313,10 +310,7 @@ void Manager::TSP_NearestNeighbor() {
         }
     }
     // Print found solution
-    std::vector<Location> locations;
-    for (Vertex<Location>* v : path)
-        locations.push_back(v->getInfo());
-    printOptimalPath(locations, distance);
+    printOptimalPath(path, distance);
 }
 
 void Manager::Other_Heuristics() {
@@ -354,10 +348,7 @@ void Manager::Other_Heuristics() {
                                   path.front()->getInfo().getLatitude(),  path.front()->getInfo().getLongitude());
 
     // Sixth Step: Print found solution
-    std::vector<Location> locations;
-    for (Vertex<Location>* v : path)
-        locations.push_back(v->getInfo());
-    printOptimalPath(locations, cost);
+    printOptimalPath(path, cost);
 }
 
 void Manager::auxDFS(Vertex<Location>* v, vector<Vertex<Location>*>& path, double& cost) {
@@ -406,13 +397,22 @@ bool Manager::crescente(Edge<Location> *primeiro, Edge<Location> *segundo) {
     return primeiro->getWeight() < segundo->getWeight();
 }
 
+void Manager::printOptimalPath(vector<Vertex<Location>*> path, double cost) {
+    for (int k = 0; k < path.size() - 1; k++)
+    {
+        cout << path[k]->getInfo().getId();
+        if (k % 20 == 0 && k != 0) cout << " .. " << endl << " .. ";
+        else cout << " ---> ";
+    }
+    cout << path[path.size() - 1]->getInfo().getId() << endl;
+    if (path[0]->getInfo().getId() == path[path.size()-1]->getInfo().getId()) cout << " You found your way, well done!^^ " << endl;
+
+    if (!path[0]->getInfo().getLabel().empty()) cout << " - " << path[0]->getInfo().getLabel();
+    cout << endl;
+    cout << "The calculated route is " << std::fixed << std::setprecision(2) << cost << " meters long." << endl;
+}
+
 void Manager::printOptimalPath(vector<Location> path, double cost) {
-    /*
-    for (int i = 0; i < graph.getVertexSet().size(); i++) {
-        cout << "LOCATION " << i << ": " << path[i].getId();
-        if (!path[i].getLabel().empty()) cout << " - " << path[i].getLabel();
-        cout << endl;
-    }*/
     for (int k = 0; k < path.size() - 1; k++)
     {
         cout << path[k].getId();
