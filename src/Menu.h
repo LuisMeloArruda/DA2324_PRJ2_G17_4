@@ -50,6 +50,8 @@ public:
      */
     void Backtracking();
 
+    void Other_Heuristics();
+
     void Triangular_Heuristic();
 
     void TSP_NearestNeighbor();
