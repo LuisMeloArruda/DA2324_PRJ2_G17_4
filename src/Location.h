@@ -16,7 +16,7 @@ class Location {
          *
          * @param id Identifier of the location.
          * @param longitude Longitude of the location.
-         * @param latitude
+         * @param latitude Latitude of the location.
          */
         Location(unsigned int id, double longitude, double latitude): id(id), longitude(longitude), latitude(latitude) {}
         /**

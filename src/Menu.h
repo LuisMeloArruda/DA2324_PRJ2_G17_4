@@ -17,7 +17,7 @@ public:
     /**
      * @brief Displays Main Menu options.
      *
-     * Complexity: O(2^V), where V is the number of vertices in the graph.
+     * Complexity: O(V!), where V is the number of vertices in the graph.
      *
      */
     int mainMenu();
@@ -45,7 +45,7 @@ public:
     /**
      * @brief Executes Backtracking algorithm.
      *
-     * Complexity: O(2^V), where V is the number of vertices in the graph.
+     * Complexity: O(V!), where V is the number of vertices in the graph.
      *
      */
     void Backtracking();

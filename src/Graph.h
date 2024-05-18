@@ -123,18 +123,10 @@ public:
     /**
      * @brief Computes the Minimum Spanning Tree (MST) of the graph using Kruskal's algorithm.
      *
-     * Complexity: O(E log E), where E is the number of edges in the graph.
+     * Complexity: O(E log V), where E is the number of edges in the graph and V the number of vertex.
      *
      */
     void MST();
-    /**
-     * @brief Finds and returns the vertices with an odd degree.
-     *
-     * Complexity: O(V), where V is the number of vertices in the graph.
-     *
-     * @return vector<Vertex<T> *> A vector of pointers to vertices with an odd degree.
-     */
-    vector<Vertex<T> *> oddVertex();
     /**
      * @brief Sorts edges in ascending order based on their weight.
      *
@@ -153,23 +145,6 @@ public:
      * @param odd A vector of pointers to vertices with an odd degree.
      */
     void perfectMatch(const vector<Vertex<T>*>& odd);
-    /**
-     * @brief Finds and returns an Eulerian tour in the graph.
-     *
-     * Complexity: O(V + E), where V is the number of vertices and E is the number of edges in the graph.
-     *
-     * @return stack<Vertex<T> *> Stack representing the Eulerian tour.
-     */
-    stack<Vertex<T> *> eulerianTour();
-    /**
-     * @brief Auxiliary method to find an Eulerian tour recursively.
-     *
-     * Complexity: O(V + E), where V is the number of vertices and E is the number of edges in the graph.
-     *
-     * @param vertex The current vertex in the tour.
-     * @param tour The stack representing the Eulerian tour.
-     */
-    void auxEulerianTour(Vertex<T>* vertex, stack<Vertex<T> *> &tour);
 
 protected:
     std::vector<Vertex<T> *> vertexSet;    // vertex set
@@ -675,17 +650,6 @@ void Graph<T>::MST() {
     }
 }
 
-// Christofides
-
-template <class T>
-vector<Vertex<T> *> Graph<T>::oddVertex() {
-    vector<Vertex<T>*> odd;
-    for (Vertex<T> *v  : vertexSet) {
-        if (!(v->getIndegree() % 2 == 0)) odd.push_back(v);
-    }
-    return odd;
-}
-
 template <class T>
 void Graph<T>::perfectMatch(const vector<Vertex<T>*>& odd) {
     for (auto v: odd) v->setVisited(false);
@@ -718,31 +682,6 @@ void Graph<T>::perfectMatch(const vector<Vertex<T>*>& odd) {
         }
         if (count == odd.size()) return;
     }
-}
-
-template <class T>
-stack<Vertex<T> *> Graph<T>::eulerianTour() {
-    for (Vertex<T> *v : vertexSet) {
-        for (Edge<T>* e: v->getAdj()) {
-            e->setSelected(false);
-            e->getReverse()->setSelected(false);
-        }
-    }
-    stack<Vertex<T> *> tour;
-    auxEulerianTour(vertexSet[0], tour);
-    return tour;
-}
-
-template <class T>
-void Graph<T>::auxEulerianTour(Vertex<T>* vertex, stack<Vertex<T> *> &tour) {
-    for (Edge<T>* e: vertex->getAdj()) {
-        if (!e->isSelected()) {
-            e->setSelected(true);
-            e->getReverse()->setSelected(true);
-            auxEulerianTour(e->getDest(), tour);
-        }
-    }
-    tour.push(vertex);
 }
 
 template <class T>
