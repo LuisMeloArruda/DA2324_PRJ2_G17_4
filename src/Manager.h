@@ -47,14 +47,14 @@ public:
     /**
      * @brief Executes the backtracking algorithm to find an optimal path.
      *
-     * Complexity: O(2^V), where V is the number of vertices in the graph.
+     * Complexity: O(V!), where V is the number of vertices in the graph.
      *
      */
     void Backtracking();
     /**
      * @brief Auxiliary function for backtracking algorithm.
      *
-     * Complexity: O(2^V * E), where V is the number of vertices and E is the number of edges.
+     * Complexity: O(V!), where V is the number of vertices.
      *
      * @param count The current count of visited vertices.
      * @param currPos The current position of the vertex in the graph.
@@ -67,14 +67,14 @@ public:
     /**
      * @brief Implements a heuristic based on the triangular inequality to approximate the Traveling Salesman Problem (TSP) solution.
      *
-     * Complexity: O(E log E), where E is the number of edges and V is the number of vertices.
+     * Complexity: O(E log V), where E is the number of edges and V is the number of vertices.
      *
      */
     void Triangular_Heuristic();
     /**
-     * @brief Implements other heuristics (Christofides) for the Traveling Salesman Problem (TSP).
+     * @brief Implements other heuristics (Adapted Christofides) for the Traveling Salesman Problem (TSP).
      *
-     * Complexity: O(V^3), where V is the number of vertices and E is the number of edges.
+     * Complexity: O(E*Log(V)), where V is the number of vertices and E is the number of edges.
      *
      */
     void Other_Heuristics();

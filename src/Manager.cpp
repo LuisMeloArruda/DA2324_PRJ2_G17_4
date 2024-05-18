@@ -398,7 +398,7 @@ void Manager::TSP_NearestNeighbor() {
 }
 
 void Manager::Other_Heuristics() {
-    // We are using Christofides' algorithm to assure an approximation factor of 3/2
+    // We are using an Adapted Christofides' algorithm
     // First Step: Find a Minimum Spanning Tree (set as selected the corresponding edges) -> O(E*Log(V))
     graph.MST();
 
@@ -408,7 +408,7 @@ void Manager::Other_Heuristics() {
         if (v->getIndegree() % 2 != 0) oddDegreeVertex.push_back(v);
     }
 
-    // Third Step: Find Perfect Matching of odd Vertex -> O(V³)
+    // Third Step: Find Perfect Matching of odd Vertex
     graph.perfectMatch(oddDegreeVertex);
 
     // Fourth Step: DFS search using only selected edges and using short-cutting -> O(V+E)

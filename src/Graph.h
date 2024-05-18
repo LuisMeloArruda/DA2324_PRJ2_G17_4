@@ -148,7 +148,7 @@ public:
     /**
      * @brief Finds the perfect matching for the odd degree vertices and marks the selected edges.
      *
-     * Complexity: O(V^2), where V is the number of vertices in the graph.
+     * Complexity: O(E*log(E)), where E is the number of edges associated with the given vertex.
      *
      * @param odd A vector of pointers to vertices with an odd degree.
      */
@@ -691,7 +691,7 @@ void Graph<T>::perfectMatch(const vector<Vertex<T>*>& odd) {
     for (auto v: odd) v->setVisited(false);
     vector<Edge<T> *> edges;
     int i = odd.size() - 1;
-    // arestas elegíveis
+    // arestas elegíveis -> O(E)
     while (i >= 0) {
         Vertex<T>* v = odd[i];
         for (Edge<T>* e: v->getAdj()) {
@@ -701,11 +701,11 @@ void Graph<T>::perfectMatch(const vector<Vertex<T>*>& odd) {
         }
         i--;
     }
-    // ordenar pela distância
+    // ordenar pela distância -> O(E*log(E))
     std::sort(edges.begin(), edges.end(), [](Edge<T> *first, Edge<T> *second) {
         return second->getWeight() > first->getWeight();
     });
-    // match
+    // match -> O(E)
     int count = 0;
     for (auto e: edges) {
         if ((!e->getDest()->isVisited() && !e->getOrig()->isVisited())) {
