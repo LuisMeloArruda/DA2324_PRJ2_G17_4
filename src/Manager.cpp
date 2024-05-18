@@ -397,7 +397,7 @@ void Manager::TSP_NearestNeighbor() {
     printOptimalPath(path, distance);
 }
 
-void Manager::Other_Heuristics() {
+void Manager::adapted_Christofides() {
     // We are using an Adapted Christofides' algorithm
     // First Step: Find a Minimum Spanning Tree (set as selected the corresponding edges) -> O(E*Log(V))
     graph.MST();

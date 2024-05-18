@@ -20,7 +20,7 @@ public:
      * Complexity: O(log N), where N is the number of elements in the UFDS.
      *
      * @param i The element whose representative needs to be found.
-     * @return The representative element of the set containing i.
+     * @return unsigned long Representative element of the set containing i.
      */
     unsigned long findSet(unsigned int i);
     /**
@@ -39,7 +39,7 @@ public:
      *
      * @param i First Element.
      * @param j Second Element.
-     * @return True if i and j belong to the same set, otherwise false.
+     * @return bool True if i and j belong to the same set, otherwise false.
      */
     bool isSameSet(unsigned int i, unsigned int j);
 private:

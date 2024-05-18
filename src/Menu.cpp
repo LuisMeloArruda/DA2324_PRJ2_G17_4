@@ -14,6 +14,7 @@ void Menu::ToyGraph() {
         std::cin >> option;
         switch (option) {
             case 1:
+                shipping = true;
                 path.append("shipping.csv");
                 break;
             case 2:
@@ -107,12 +108,15 @@ Menu::Menu() {
         std::cin >> option;
         switch (option) {
             case 1:
+                backtracking = true;
                 ToyGraph();
                 break;
             case 2:
+                backtracking = false;
                 ExtraFullyConnected();
                 break;
             case 3:
+                backtracking = false;
                 RealWorld();
                 break;
             default:
@@ -146,26 +150,42 @@ int Menu::mainMenu() {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             mainMenu();
         } else {
-            auto start = chrono::high_resolution_clock::now();
             switch (option) {
                 case 0:
                     exit(0);
                 case 1:
-                    Backtracking();
+                    if (backtracking) {
+                        Backtracking();
+                    } else {
+                        std::cout << "\nIt will take too long :(\n";
+                    }
                     break;
                 case 2:
+                    if (shipping) {
+                        std::cout << "\nIt doesn't work :(\n";
+                        break;
+                    }
                     Triangular_Heuristic();
                     break;
                 case 3:
+                    if (shipping) {
+                        std::cout << "\nIt doesn't work :(\n";
+                        break;
+                    }
                     TSP_NearestNeighborComplete();
                     break;
                 case 4:
-                    Other_Heuristics();
+                    if (shipping) {
+                        std::cout << "\nIt doesn't work :(\n";
+                        break;
+                    }
+                    adapted_Christofides();
                     break;
                 case 5:
                     TSP_NearestNeighbor();
                     break;
                 case 6:
+                    shipping = false;
                     network.clearGraph();
                     return 1;
                 default:
@@ -176,10 +196,10 @@ int Menu::mainMenu() {
     }
 }
 
-void Menu::Other_Heuristics() {
+void Menu::adapted_Christofides() {
     std::cout << "\nLoading... \n\n";
     std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-    network.Other_Heuristics();
+    network.adapted_Christofides();
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::chrono::duration<double, std::milli> duration = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(end - start);
     double time = duration.count();

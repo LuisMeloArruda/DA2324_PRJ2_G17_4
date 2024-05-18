@@ -74,30 +74,34 @@ public:
     /**
      * @brief Implements other heuristics (Adapted Christofides) for the Traveling Salesman Problem (TSP).
      *
-     * Complexity: O(E*Log(V)), where V is the number of vertices and E is the number of edges.
+     * Complexity: O(E log V), where E is the number of edges and V is the number of vertices.
      *
      */
-    void Other_Heuristics();
+    void adapted_Christofides();
      /**
     * @brief Implements other heuristics (Nearest Neighbor) for the Traveling Salesman Problem (TSP). (Assuming Fully Connected)
     *
-    * Complexity:
+    * Complexity: O(V^2) where V is the number of vertices in the graph.
     *
     */
     void TSP_NearestNeighborComplete();
     /**
     * @brief Implements other heuristics (Nearest Neighbor) for the Traveling Salesman Problem (TSP).
     *
-    * Complexity:
+    * Complexity: O(V^2) where V is the number of vertices in the graph.
     *
     */
     void TSP_NearestNeighbor();
     /**
-     * @brief Returns distance
+     * @brief Finds the nearest unvisited neighbor for a given vertex and updates the path and total distance.
      *
-     * Complexity:
-     * @param Vertice
-     * @param distance
+     * Complexity: O(V^2) where V is the number of vertices in the graph.
+     *
+     * @param Vertice Pointer to the current vertex.
+     * @param distance Reference to the total distance of the path, which will be updated.
+     * @param path Reference to the path vector, which will be updated to include the visited vertices.
+     *
+     * @return Vertex<Location>* Pointer to the last vertex visited in the path.
      */
     Vertex<Location> *aux_NearestNeighbor(Vertex<Location> *Vertice, double &distance, std::vector<Vertex<Location>*> &path);
     /**
@@ -107,7 +111,7 @@ public:
      *
      * @param cord The coordinate in degrees.
      *
-     * @return The coordinate in radians.
+     * @return double Coordinate in radians.
      */
     double convert_to_radians(double cord);
     /**
@@ -119,7 +123,8 @@ public:
      * @param lon1 Longitude of the first point.
      * @param lat2 Latitude of the second point.
      * @param lon2 Longitude of the second point.
-     * @return The Haversine distance in meters.
+     *
+     * @return double Haversine distance in meters.
      */
     double Haversine(double lat1, double lon1, double lat2, double lon2);
     /**
@@ -138,6 +143,7 @@ public:
      *
      * @param primeiro The first edge.
      * @param segundo The second edge.
+     *
      * @return True if the weight of the first edge is less than the weight of the second edge, false otherwise.
      */
     static bool crescente(Edge<Location> *primeiro, Edge<Location> *segundo);

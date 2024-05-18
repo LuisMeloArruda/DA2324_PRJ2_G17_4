@@ -48,7 +48,7 @@ class Location {
          *
          * Complexity: O(1)
          *
-         * @return Id of the location.
+         * @return unsigned int Id of the location.
          */
         unsigned int getId() const;
         /**
@@ -56,7 +56,7 @@ class Location {
          *
          * Complexity: O(1)
          *
-         * @return Longitude of the location.
+         * @return double Longitude of the location.
          */
         double getLongitude();
         /**
@@ -64,7 +64,7 @@ class Location {
          *
          * Complexity: O(1)
          *
-         * @return Latitude of the location.
+         * @return double Latitude of the location.
          */
         double getLatitude();
         /**
@@ -72,7 +72,7 @@ class Location {
          *
          * Complexity: O(1)
          *
-         * @return Label of the location.
+         * @return string Label of the location.
          */
         std::string getLabel();
         /**
@@ -114,7 +114,7 @@ class Location {
          *
          * @param b The other location to compare with.
          *
-         * @return True if the ids of both locations are equal, false otherwise.
+         * @return bool True if the ids of both locations are equal, false otherwise.
          */
         bool operator==(const Location &b) const;
 };

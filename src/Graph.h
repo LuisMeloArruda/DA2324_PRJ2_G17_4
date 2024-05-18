@@ -132,7 +132,7 @@ public:
      *
      * Complexity: O(V), where V is the number of vertices in the graph.
      *
-     * @return A vector of pointers to vertices with an odd degree.
+     * @return vector<Vertex<T> *> A vector of pointers to vertices with an odd degree.
      */
     vector<Vertex<T> *> oddVertex();
     /**
@@ -142,7 +142,7 @@ public:
      *
      * @param first The first edge to compare.
      * @param second The second edge to compare.
-     * @return True if the weight of the first edge is less than the weight of the second edge, false otherwise.
+     * @return bool True if the weight of the first edge is less than the weight of the second edge, false otherwise.
      */
     static bool ascending(Edge<T> *first, Edge<T> *second);
     /**
@@ -158,7 +158,7 @@ public:
      *
      * Complexity: O(V + E), where V is the number of vertices and E is the number of edges in the graph.
      *
-     * @return A stack representing the Eulerian tour.
+     * @return stack<Vertex<T> *> Stack representing the Eulerian tour.
      */
     stack<Vertex<T> *> eulerianTour();
     /**

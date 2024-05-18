@@ -49,17 +49,39 @@ public:
      *
      */
     void Backtracking();
-
-    void Other_Heuristics();
-
+    /**
+     * @brief Executes an adapted Christofides algorithm.
+     *
+     * Complexity: O(E log V), where E is the number of edges and V is the number of vertices.
+     *
+     */
+    void adapted_Christofides();
+    /**
+     * @brief Executes Triangular Heuristic algorithm.
+     *
+     * Complexity: O(E log V), where E is the number of edges and V is the number of vertices.
+     *
+     */
     void Triangular_Heuristic();
-
+    /**
+     * @brief Executes Nearest Neighbor algorithm for non-connected graphs.
+     *
+     * Complexity: O(V^2) where V is the number of vertices in the graph.
+     *
+     */
     void TSP_NearestNeighbor();
-
+    /**
+     * @brief Executes Nearest Neighbor algorithm for fully connected graphs.
+     *
+     * Complexity: O(V^2) where V is the number of vertices in the graph.
+     *
+     */
     void TSP_NearestNeighborComplete();
 
 private:
     Manager network;
+    bool backtracking;
+    bool shipping;
 };
 
 
