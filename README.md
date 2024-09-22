@@ -1,13 +1,21 @@
-<h3>Projeto de Avaliação Desenho de Algoritmos 2º ano, 2º Semestre, 2023/2024</h3>
+# Projeto de Avaliação / Evaluation Project
+## Desenho de Algoritmos / Algorithm Design
+2º ano, 2º Semestre, 2023/2024
 
-***
-<h4>Membros:</h4>
+### Membros / Members:
 <ul>
-    <li>Luís Arruda 202206970 </li>
-    <li>Afonso Machado 202207611</li>
-    <li>Ana Geraldes 202208030</li>
+    <li>
+        Luís Arruda 202206970@up.pt
+    </li>
+    <li>
+        Afonso Machado 202207611@up.pt
+    </li>
+    <li>
+        Ana Geraldes 202208030@up.pt
+    </li>
 </ul>
 
-
-<h4>Classificação:</h4>
-...
+### Classificação / Grade:
+<p>
+    18.30
+</p>
